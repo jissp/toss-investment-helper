@@ -1,0 +1,22 @@
+{
+    "manifest_version": 3,
+    "name": "Toss Investment Extension",
+    "version": "1.0.0",
+    "description": "토스증권의 기능을 확장하는 확장 프로그램입니다.",
+    "permissions": ["tabs", "storage", "cookies", "notifications"],
+    "host_permissions": ["https://www.tossinvest.com/*", "http://localhost/*"],
+    "background": {
+        "service_worker": "src/background/background.ts",
+        "type": "module"
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "https://www.tossinvest.com/*",
+                "https://wts-cert-api.tossinvest.com/*"
+            ],
+            "js": ["src/content/content.ts"],
+            "run_at": "document_idle"
+        }
+    ]
+}

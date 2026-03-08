@@ -1,0 +1,32 @@
+services:
+#  toss-investment-helper-be:
+#    container_name: toss-investment-helper-be
+#    build:
+#      context: .
+#      dockerfile: docker/Dockerfile
+#      args:
+#        - NODE_ENV=prod
+#        - APP_NAME=toss-investment-helper-be
+#    ports:
+#      - '3100:3100'
+#    networks:
+#      - toss-investment-helper-network
+  mongo:
+    image: mongo:jammy
+    ports:
+      - '27017:27017'
+    networks:
+      - toss-investment-helper-network
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=toss
+      - MONGO_INITDB_ROOT_PASSWORD=helper
+  redis:
+    image: redis:8.4.0-alpine3.22
+    ports:
+      - '6379:6379'
+    networks:
+      - toss-investment-helper-network
+
+networks:
+  toss-investment-helper-network:
+    driver: bridge
