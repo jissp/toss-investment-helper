@@ -112,7 +112,7 @@ export class UpdateFavoriteStockItemDto implements TossWatchListItem {
     @ApiPropertyOptional({ description: '가격 정보' })
     prices?: WatchlistItemPricesDto;
 
-    @IsUrl()
+    @IsString()
     @ApiProperty({ description: '로고 이미지 URL' })
     logoImageUrl!: string;
 

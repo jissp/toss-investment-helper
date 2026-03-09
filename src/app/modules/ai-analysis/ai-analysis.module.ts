@@ -1,35 +1,62 @@
-import { Module } from '@nestjs/common';
+import { DynamicModule, Module } from '@nestjs/common';
 import { QueueModule } from '@modules/queue';
-import { FavoriteStockModule } from '@app/modules/schemas/favorite-stock';
-import { AiAnalysisService } from './ai-analysis.service';
+import { GeminiCliModule } from '@modules/gemini-cli';
+import { BotName, SlackModule } from '@modules/slack';
+import { MarketAnalyzerModule } from '@app/modules/ai-analysis/analyzers/market-analyzer';
+import { StockAnalyzerModule } from '@app/modules/ai-analysis/analyzers/stock-analyzer';
+import { AiAnalysisQueueType } from './common';
+import { AiAnalysisFlowType } from './ai-analysis.types';
+import {
+    PromptToGeminiCliProcessor,
+    RequestAnalysisFlowProcessor,
+} from './processors';
 import { AiAnalysisAdapterFactory } from './ai-analysis-adapter.factory';
-import { MarketAnalysisAdapter, StockAnalysisAdapter } from './adapters';
-import { AiAnalysisFlowType, AiAnalysisQueueType } from './ai-analysis.types';
+import { AiAnalysisService } from './ai-analysis.service';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { AiAnalysisReportModule } from '@app/modules/schemas/ai-analysis-report';
 
-const flowTypes = [
-    AiAnalysisFlowType.RequestStockAnalysis,
-    AiAnalysisFlowType.RequestMarketAnalysis,
-];
-
+const flowTypes = [AiAnalysisFlowType.RequestAnalysis];
 const queueTypes = [AiAnalysisQueueType.PromptToGeminiCli];
+const processors = [RequestAnalysisFlowProcessor, PromptToGeminiCliProcessor];
 
-@Module({
-    imports: [
-        QueueModule.forFeature({
-            flowTypes,
-            queueTypes,
-        }),
-        // Schema Modules
-        FavoriteStockModule, // 종목 분석 데이터 조회
-        // Market 분석은 Gemini 프롬프트로만 처리 (별도 Schema 불필요)
-    ],
-    providers: [
-        AiAnalysisService,
-        AiAnalysisAdapterFactory,
-        // Individual Adapters
-        StockAnalysisAdapter,
-        MarketAnalysisAdapter,
-    ],
-    exports: [AiAnalysisService],
-})
-export class AiAnalysisModule {}
+@Module({})
+export class AiAnalysisModule {
+    public static forRoot(): DynamicModule {
+        return {
+            global: true,
+            module: AiAnalysisModule,
+            imports: [
+                QueueModule.forFeature({
+                    flowTypes,
+                    queueTypes,
+                }),
+                GeminiCliModule,
+                SlackModule.forFeature(BotName.StockBot, {
+                    imports: [ConfigModule],
+                    inject: [ConfigService],
+                    useFactory: (configService: ConfigService) =>
+                        configService.get<string>('slack.channel.geminiLog'),
+                }),
+                AiAnalysisReportModule,
+                MarketAnalyzerModule,
+                StockAnalyzerModule,
+            ],
+            providers: [...processors, AiAnalysisAdapterFactory],
+            exports: [AiAnalysisAdapterFactory],
+        };
+    }
+
+    public static forFeature(): DynamicModule {
+        return {
+            module: AiAnalysisModule,
+            imports: [
+                QueueModule.forFeature({
+                    flowTypes,
+                    queueTypes,
+                }),
+            ],
+            providers: [AiAnalysisService],
+            exports: [AiAnalysisService],
+        };
+    }
+}

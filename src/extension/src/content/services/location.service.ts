@@ -1,4 +1,4 @@
-import { patterns } from '@extension/src/common/constants';
+import { patterns } from '@extension/src/common/page-patterns';
 
 export class LocationService {
     public isStockOrderPage(): boolean {

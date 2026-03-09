@@ -11,10 +11,7 @@
     },
     "content_scripts": [
         {
-            "matches": [
-                "https://www.tossinvest.com/*",
-                "https://wts-cert-api.tossinvest.com/*"
-            ],
+            "matches": ["https://www.tossinvest.com/*"],
             "js": ["src/content/content.ts"],
             "run_at": "document_idle"
         }

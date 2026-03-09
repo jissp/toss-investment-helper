@@ -1,9 +1,11 @@
 import { Injectable } from '@nestjs/common';
+import { StockAnalyzerAdapter } from '@app/modules/ai-analysis/analyzers/stock-analyzer';
+import { MarketAnalyzerAdapter } from '@app/modules/ai-analysis/analyzers/market-analyzer';
+import { IBaseAnalysisAdapter } from './common';
 import {
     AiAnalysisAdapterType,
-    IBaseAnalysisAdapter,
-} from './ai-analysis.types';
-import { MarketAnalysisAdapter, StockAnalysisAdapter } from './adapters';
+    RequestAiAnalysisTypeParam,
+} from './common/ai-analysis.types';
 
 @Injectable()
 export class AiAnalysisAdapterFactory {
@@ -13,8 +15,8 @@ export class AiAnalysisAdapterFactory {
     >;
 
     constructor(
-        stockAnalysisAdapter: StockAnalysisAdapter,
-        marketAnalysisAdapter: MarketAnalysisAdapter,
+        stockAnalysisAdapter: StockAnalyzerAdapter,
+        marketAnalysisAdapter: MarketAnalyzerAdapter,
     ) {
         this.adapterMap = {
             [AiAnalysisAdapterType.STOCK]: stockAnalysisAdapter,
@@ -26,11 +28,13 @@ export class AiAnalysisAdapterFactory {
      * 분석 타입에 맞는 Adapter를 반환합니다.
      * 이미 생성된 provider 인스턴스를 그대로 반환합니다.
      */
-    getAdapter(type: AiAnalysisAdapterType): IBaseAnalysisAdapter {
+    getAdapter<T extends AiAnalysisAdapterType>(
+        type: T,
+    ): IBaseAnalysisAdapter<RequestAiAnalysisTypeParam<T>> {
         const adapter = this.adapterMap[type];
         if (!adapter) {
             throw new Error(`Unknown adapter type: ${type}`);
         }
-        return adapter;
+        return adapter as IBaseAnalysisAdapter<RequestAiAnalysisTypeParam<T>>;
     }
 }

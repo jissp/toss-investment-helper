@@ -15,6 +15,7 @@ export default defineConfig({
     resolve: {
         alias: {
             '@extension': path.resolve(__dirname, '.'),
+            '@app': path.resolve(__dirname, '../app'),
         },
     },
 });

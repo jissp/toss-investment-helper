@@ -1,22 +1,7 @@
-import {
-    BackgroundEvent,
-    BackgroundEventType,
-} from '@extension/src/types/background-event.types';
-import {
-    DocumentService,
-    LocationService,
-} from '@extension/src/content/services';
+import { ExtensionMessage } from '@extension/src/common/types';
 
 export class ContentEventListener {
-    private readonly documentService: DocumentService;
-    private readonly locationService: LocationService;
-
-    private isProcessingForCheckAndInstallComponentsPeriodically: boolean = false;
-
     constructor(handler: chrome.events.Event<any>) {
-        this.documentService = new DocumentService();
-        this.locationService = new LocationService();
-
         handler.addListener(this.handleMessage.bind(this));
     }
 
@@ -24,7 +9,7 @@ export class ContentEventListener {
      * @param message
      * @private
      */
-    private isBackgroundEvent(message: any): message is BackgroundEvent {
+    private isExtensionMessage(message: any): message is ExtensionMessage {
         return 'type' in message;
     }
 
@@ -32,52 +17,12 @@ export class ContentEventListener {
      * @param message
      */
     public handleMessage(message: unknown) {
-        if (!this.isBackgroundEvent(message)) {
+        if (!this.isExtensionMessage(message)) {
             return;
         }
 
-        switch (message.type) {
-            case BackgroundEventType.HealthCheckResponse:
-                return this.install();
-        }
-    }
-
-    /**
-     * @private
-     */
-    private install() {
-        try {
-            setInterval(() => {
-                this.checkAndInstallComponentsPeriodically();
-            }, 1000);
-        } catch (error) {
-            console.warn(error);
-        }
-    }
-
-    private checkAndInstallComponentsPeriodically() {
-        if (this.isProcessingForCheckAndInstallComponentsPeriodically) {
-            return;
-        }
-
-        try {
-            this.isProcessingForCheckAndInstallComponentsPeriodically = true;
-
-            if (this.locationService.isStockOrderPage()) {
-                const requestStockAnalysisButton =
-                    this.documentService.getRequestStockAnalysisButton();
-                if (!requestStockAnalysisButton) {
-                    this.documentService.installRequestStockAnalysisButton();
-                }
-
-                const updateFavoriteStockButton =
-                    this.documentService.getUpdateFavoriteButton();
-                if (!updateFavoriteStockButton) {
-                    this.documentService.installUpdateFavoriteButton();
-                }
-            }
-        } finally {
-            this.isProcessingForCheckAndInstallComponentsPeriodically = false;
-        }
+        // switch (message.type) {
+        //     case ExtensionMessageType.InitiateUiInjection:
+        // }
     }
 }

@@ -3,7 +3,7 @@ export enum NewsCrawlerProvider {
 }
 
 export enum NewsCrawlerQueueType {
-    RequestCrawlingNews = 'RequestCrawlingNews',
+    RequestCrawlingNews = 'request-crawling-news',
 }
 
 export enum NewsStrategy {

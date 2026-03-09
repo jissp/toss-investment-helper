@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
-import { AiAnalyzerModule } from '@app/modules/back-ai-analyzer';
 import { AiAnalysisReportModule } from '@app/modules/schemas/ai-analysis-report';
+import { FavoriteStockModule } from '@app/modules/schemas/favorite-stock';
+import { AiAnalysisModule } from '@app/modules/ai-analysis';
 import {
     GetAnalysisReportUseCase,
     ListAnalysisReportsUseCase,
@@ -17,7 +18,11 @@ const useCases = [
 ];
 
 @Module({
-    imports: [AiAnalyzerModule, AiAnalysisReportModule],
+    imports: [
+        AiAnalysisModule.forFeature(),
+        AiAnalysisReportModule,
+        FavoriteStockModule,
+    ],
     controllers: [AiAnalysisRequestController],
     providers: useCases,
     exports: useCases,

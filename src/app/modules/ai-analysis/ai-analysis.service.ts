@@ -1,23 +1,18 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { FlowProducer } from 'bullmq';
 import { getFlowProducerToken } from '@nestjs/bullmq';
-import {
-    AiAnalysisAdapterType,
-    AiAnalysisFlowType,
-    AiAnalysisQueueType,
-    RequestMarketAnalysisParams,
-    RequestStockAnalysisParams,
-} from './ai-analysis.types';
+import { RequestMarketAnalysisParams } from '@app/modules/ai-analysis/analyzers/market-analyzer/market-analyzer.types';
+import { RequestStockAnalysisRequestDto } from '@app/modules/domains/ai-analysis-request';
+import { AiAnalysisAdapterType } from './common';
+import { AiAnalysisFlowType } from './ai-analysis.types';
 import { AiAnalysisAdapterFactory } from './ai-analysis-adapter.factory';
 
 @Injectable()
 export class AiAnalysisService {
     constructor(
         private readonly adapterFactory: AiAnalysisAdapterFactory,
-        @Inject(getFlowProducerToken(AiAnalysisFlowType.RequestStockAnalysis))
-        private readonly stockFlowProducer: FlowProducer,
-        @Inject(getFlowProducerToken(AiAnalysisFlowType.RequestMarketAnalysis))
-        private readonly marketFlowProducer: FlowProducer,
+        @Inject(getFlowProducerToken(AiAnalysisFlowType.RequestAnalysis))
+        private readonly requestAnalysisFlowProducer: FlowProducer,
     ) {}
 
     /**
@@ -29,7 +24,7 @@ export class AiAnalysisService {
      * 3. Flow Job에 Children Job 등록
      */
     async requestStockAnalysis(
-        params: RequestStockAnalysisParams,
+        params: RequestStockAnalysisRequestDto,
     ): Promise<void> {
         const adapter = this.adapterFactory.getAdapter(
             AiAnalysisAdapterType.STOCK,
@@ -37,11 +32,11 @@ export class AiAnalysisService {
         const childrenJobs = await adapter.execute(params);
 
         // Flow Job에 Children Job 등록
-        await this.stockFlowProducer.add({
-            name: 'RequestStockAnalysis',
-            queueName: AiAnalysisQueueType.PromptToGeminiCli,
-            data: { stockSymbol: params.stockSymbol },
-            children: childrenJobs,
+        await this.requestAnalysisFlowProducer.add({
+            name: 'AI 분석 요청',
+            queueName: AiAnalysisFlowType.RequestAnalysis,
+            data: params,
+            children: [childrenJobs],
         });
     }
 
@@ -62,11 +57,10 @@ export class AiAnalysisService {
         const childrenJobs = await adapter.execute(params);
 
         // Flow Job에 Children Job 등록
-        await this.marketFlowProducer.add({
-            name: 'RequestMarketAnalysis',
-            queueName: AiAnalysisQueueType.PromptToGeminiCli,
-            data: { marketType: params.marketType },
-            children: childrenJobs,
+        await this.requestAnalysisFlowProducer.add({
+            name: 'AI 분석 요청',
+            queueName: AiAnalysisFlowType.RequestAnalysis,
+            children: [childrenJobs],
         });
     }
 }
