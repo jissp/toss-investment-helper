@@ -21,10 +21,7 @@ export class RequestAnalysisFlowProcessor extends WorkerHost {
         super();
     }
 
-    async process(
-        job: Job<RequestStockAnalysisRequestDto>,
-        token?: string,
-    ): Promise<any> {
+    async process(job: Job<RequestStockAnalysisRequestDto>): Promise<any> {
         const { stockSymbol, stockName } = job.data;
         const results = await this.getChildrenValues(job);
 

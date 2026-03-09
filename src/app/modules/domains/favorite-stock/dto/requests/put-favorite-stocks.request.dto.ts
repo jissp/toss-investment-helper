@@ -5,7 +5,6 @@ import {
     IsNumber,
     IsOptional,
     IsString,
-    IsUrl,
     ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';

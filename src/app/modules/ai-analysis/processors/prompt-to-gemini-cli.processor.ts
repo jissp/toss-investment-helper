@@ -21,10 +21,7 @@ export class PromptToGeminiCliProcessor extends WorkerHost {
         super();
     }
 
-    async process(
-        job: Job<PromptToGeminiCliParams>,
-        token?: string,
-    ): Promise<any> {
+    async process(job: Job<PromptToGeminiCliParams>): Promise<any> {
         try {
             const { prompt, model } = job.data;
 

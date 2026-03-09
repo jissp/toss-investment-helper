@@ -24,9 +24,8 @@ export class RequestStockAnalysisProcessor extends WorkerHost {
 
     async process(
         job: Job<RequestAiAnalysisTypeParam<AiAnalysisAdapterType.STOCK>>,
-        token?: string,
     ): Promise<any> {
-        const { stockName, tradingTrends } = job.data;
+        const { tradingTrends } = job.data;
 
         const results = await this.getChildrenValues(job);
 
