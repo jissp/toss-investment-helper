@@ -1,98 +1,84 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Toss Investment Helper
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+토스증권(Toss Securities) 사용자의 투자 결정을 돕기 위한 AI 기반 투자 보조 도구입니다. 뉴스 크롤링, AI 분석, 그리고 크롬 확장 프로그램을 통한 실시간 정보를 제공합니다.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 1. 개요
 
-## Description
+- **프로젝트명**: Toss Investment Helper
+- **주요 기능**:
+  - 토스증권 웹 사이트 확장 기능 (Chrome Extension)
+    - 종목 분석 추가 (관심 종목 추가/해제 버튼 옆)
+      ![img.png](assets/img.png)
+  - Gemini AI를 활용한 뉴스 및 종목 분석
+  - 구글 RSS 및 네이버 뉴스를 통한 실시간 정보 수집
+  - Slack을 통한 분석 결과 알림 및 로그 확인
+- **기술 스택**:
+  - **Backend**: TypeScript (NestJS), MongoDB, Redis (BullMQ)
+  - **Chrome Extension**: Vite, CRXJS, TypeScript
+  - **AI**: Gemini AI Integration
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+---
 
-## Project setup
+## 2. Quick Start
 
-```bash
-$ npm install
-```
+### 초기 환경 설정
 
-## Compile and run the project
+1. **환경 변수 설정**
+   `.env` 파일을 루트 디렉토리에 생성하고 필요한 정보를 입력합니다.
+   ```env
+   MONGO_DATABASE_URI="mongodb://toss:helper@mongo:27017"
 
-```bash
-# development
-$ npm run start
+   REDIS_HOST="redis"
+   REDIS_PORT=6379
+   REDIS_MODE="single"
 
-# watch mode
-$ npm run start:dev
+   STOCK_PLUS_HOST="https://spn.stockplus.com"
+   GOOGLE_RSS_BUSINESS="https://news.google.com/rss/topics/CAAqJggKIiBDQkFTRWdvSUwyMHZNRGx6TVdZU0FtdHZHZ0pMVWlnQVAB?hl=ko&gl=KR&ceid=KR%3Ako"
 
-# production mode
-$ npm run start:prod
-```
+   NAVER_SEARCH_ENABLE="true"
+   NAVER_SEARCH_HOST="https://openapi.naver.com"
+   NAVER_SEARCH_CLIENT_ID=""
+   NAVER_SEARCH_CLIENT_SECRET=""
 
-## Run tests
+   GEMINI_CLI_MODEL="gemini-3-flash-preview"
 
-```bash
-# unit tests
-$ npm run test
+   SLACK_ENABLE="false"
+   SLACK_SIGNING_SECRET=""
+   SLACK_BOT_TOKEN=""
+   SLACK_APP_TOKEN=""
+   SLACK_STOCK_CHANNEL_ID=""
+   SLACK_STOCK_GEMINI_LOG_CHANNEL_ID=""
+   ```
 
-# e2e tests
-$ npm run test:e2e
+2. **Docker Build**
 
-# test coverage
-$ npm run test:cov
-```
+   MongoDB와 Redis를 Docker로 실행합니다.
+   ```bash
+   docker-compose up -d
+   ```
 
-## Deployment
+### 크롬 확장 프로그램 빌드 및 설치
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+1. **확장 프로그램 빌드**
+   ```bash
+   npm run build:extension
+   ```
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+2. **확장 프로그램 로드**
+   - Chrome 브라우저에서 `chrome://extensions/` 접속
+   - '압축해제된 확장 프로그램을 로드합니다' (Load unpacked) 클릭
+   - 프로젝트 내 `src/extension/dist` 폴더 선택
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
+---
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+## 3. 주요 기능 소개
 
-## Resources
+### 토스증권 확장 프로그램 (Chrome Extension)
 
-Check out a few resources that may come in handy when working with NestJS:
+#### AI 뉴스 분석 (AI Analysis)
+- **Gemini AI 활용**: 수집된 뉴스의 핵심 내용을 요약하고, 해당 뉴스가 시장이나 특정 종목에 미칠 영향을 분석합니다.
+- **마켓/스톡 애널라이저**: 거시적인 시장 상황 분석과 개별 종목 분석을 별도 프로세스로 처리합니다.
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+### 자동화된 뉴스 수집 (News Crawler)
+- **멀티 소스**: 구글 RSS와 네이버 검색 API를 통해 실시간으로 투자 관련 뉴스를 크롤링합니다.
+- **스케줄링**: 주기적으로 뉴스를 수집하고 중복을 제거하여 데이터베이스에 저장합니다.

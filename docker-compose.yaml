@@ -1,16 +1,16 @@
 services:
-#  toss-investment-helper-be:
-#    container_name: toss-investment-helper-be
-#    build:
-#      context: .
-#      dockerfile: docker/Dockerfile
-#      args:
-#        - NODE_ENV=prod
-#        - APP_NAME=toss-investment-helper-be
-#    ports:
-#      - '3100:3100'
-#    networks:
-#      - toss-investment-helper-network
+  toss-investment-helper-be:
+    container_name: toss-investment-helper-be
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      args:
+        - NODE_ENV=prod
+        - APP_NAME=toss-investment-helper-be
+    ports:
+      - '3000:3000'
+    networks:
+      - toss-investment-helper-network
   mongo:
     image: mongo:jammy
     ports:
