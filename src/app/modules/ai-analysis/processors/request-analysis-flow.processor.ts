@@ -8,7 +8,7 @@ import {
     ReportType,
 } from '@app/modules/schemas/ai-analysis-report';
 import { AiAnalysisFlowType } from '../ai-analysis.types';
-import { RequestStockAnalysisRequestDto } from '@app/modules/domains/ai-analysis-request';
+import { RequestStockAnalysisRequestDto } from '@app/modules/domains/ai-analysis-domain';
 
 @Processor(AiAnalysisFlowType.RequestAnalysis)
 export class RequestAnalysisFlowProcessor extends WorkerHost {

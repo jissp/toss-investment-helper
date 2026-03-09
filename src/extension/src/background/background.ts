@@ -1,3 +1,3 @@
-import { BackgroundEventListener } from './services/background-event.listener';
+import { BackgroundEventListener } from './background-event.listener';
 
 new BackgroundEventListener(chrome.runtime.onMessage);

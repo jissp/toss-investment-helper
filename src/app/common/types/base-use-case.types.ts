@@ -1,3 +1,3 @@
 export interface BaseUseCase<T = void, R = unknown> {
-    execute: (args: T) => Promise<R>;
+    execute: (args: T) => R;
 }

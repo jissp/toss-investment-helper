@@ -1,6 +1,6 @@
 import { GeminiCliModel } from '@modules/gemini-cli';
 import { RequestMarketAnalysisParams } from '@app/modules/ai-analysis/analyzers/market-analyzer/market-analyzer.types';
-import { RequestStockAnalysisRequestDto } from '@app/modules/domains/ai-analysis-request/dto/requests/request-stock-analysis.request.dto';
+import { RequestStockAnalysisRequestDto } from '@app/modules/domains/ai-analysis-domain/dto/requests/request-stock-analysis.request.dto';
 
 export enum AiAnalysisQueueType {
     PromptToGeminiCli = 'prompt-to-gemini-cli',

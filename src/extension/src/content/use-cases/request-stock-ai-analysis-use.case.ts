@@ -1,9 +1,8 @@
-import { ComponentType } from '@extension/src/content';
-import { context } from '@extension/src/common/context';
 import { Nullable } from '@common/types';
+import { context } from '@extension/src/common/context';
 
-export class RequestStockAnalysisUseCase {
-    private buttonId: string = 'request-stock-analysis';
+export class RequestStockAiAnalysisUseCase {
+    private buttonId: string = 'request-stock-ai-analysis';
     private isChecking: boolean = false;
 
     constructor() {}
@@ -26,8 +25,8 @@ export class RequestStockAnalysisUseCase {
                 return;
             }
 
-            const requestStockAnalysisButton = this.getButtonElement();
-            if (!requestStockAnalysisButton) {
+            const button = this.getButtonElement();
+            if (!button) {
                 this.installButton();
             }
         } finally {
@@ -55,35 +54,30 @@ export class RequestStockAnalysisUseCase {
      *
      */
     public createButtonElement() {
-        const button = context.componentFactory.create(ComponentType.Button);
+        const element = context.templateService.getTemplate(
+            'src/content/templates/request-stock-ai-analysis.button.html',
+        );
+        element.addEventListener('click', () => {
+            const handle = async () => {
+                const stockCode = context.locationService.extractStockCode();
+                const stockResponse =
+                    await context.tossWtsApiClient.getStockInfo(stockCode);
+                const tradingTrendResponse =
+                    await context.tossWtsApiClient.getTradingTrend(stockCode);
 
-        return button
-            .buildId(this.buttonId)
-            .buildClass('tw4l-emtxt715 tw4l-emtxt7o tw4l-emtxt7y tw4l-emtxt712')
-            .buildText('📊')
-            .buildOnClick(() => {
-                const handle = async () => {
-                    const stockCode =
-                        context.locationService.extractStockCode();
-                    const stockResponse =
-                        await context.tossWtsApiClient.getStockInfo(stockCode);
-                    const tradingTrendResponse =
-                        await context.tossWtsApiClient.getTradingTrend(
-                            stockCode,
-                        );
+                const { symbol, name } = stockResponse.result;
 
-                    const { symbol, name } = stockResponse.result;
+                await context.backendApi.requestStockAiAnalysis({
+                    stockSymbol: symbol,
+                    stockName: name,
+                    tradingTrends: tradingTrendResponse.result.body,
+                });
+            };
 
-                    await context.backendApi.requestStockAnalysis({
-                        stockSymbol: symbol,
-                        stockName: name,
-                        tradingTrends: tradingTrendResponse.result.body,
-                    });
-                };
+            handle();
+        });
 
-                handle();
-            })
-            .build();
+        return element;
     }
 
     /**

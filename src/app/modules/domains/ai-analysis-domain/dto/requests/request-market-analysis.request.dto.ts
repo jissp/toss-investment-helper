@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum } from 'class-validator';
-import { MarketType } from '../../ai-analysis-request.types';
+import { MarketType } from '../../ai-analysis-domain.types';
 
 export class RequestMarketAnalysisRequestDto {
     @ApiProperty({

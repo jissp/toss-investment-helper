@@ -1,6 +1,7 @@
 import { context } from '@extension/src/common/context';
 import {
-    RequestStockAnalysisUseCase,
+    RequestStockAiAnalysisUseCase,
+    ShowStockScoreSectionUseCase,
     SendFavoriteStocksUseCase,
 } from '@extension/src/content/use-cases';
 import { ContentEventListener } from './content-event.listener';
@@ -14,10 +15,15 @@ async function init() {
         return;
     }
 
-    const requestStockAnalysisUseCase = new RequestStockAnalysisUseCase();
+    await context.templateService.init();
+
+    const requestStockAnalysisUseCase = new RequestStockAiAnalysisUseCase();
+    const requestStockScoreAnalysisUseCase =
+        new ShowStockScoreSectionUseCase();
     const sendFavoriteStocksUseCase = new SendFavoriteStocksUseCase();
 
     requestStockAnalysisUseCase.execute();
+    requestStockScoreAnalysisUseCase.execute();
     sendFavoriteStocksUseCase.execute();
 }
 

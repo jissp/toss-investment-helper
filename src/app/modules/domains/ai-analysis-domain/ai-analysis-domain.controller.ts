@@ -30,8 +30,8 @@ import {
 import { ReportType } from '@app/modules/schemas/ai-analysis-report';
 
 @ApiTags('AI Analysis Request')
-@Controller('v1/ai-analysis-request')
-export class AiAnalysisRequestController {
+@Controller('v1/ai-analysis')
+export class AiAnalysisDomainController {
     constructor(
         private readonly requestStockAnalysisUseCase: RequestStockAnalysisUseCase,
         private readonly requestMarketAnalysisUseCase: RequestMarketAnalysisUseCase,

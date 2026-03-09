@@ -8,7 +8,7 @@ import {
     RequestMarketAnalysisUseCase,
     RequestStockAnalysisUseCase,
 } from './use-cases';
-import { AiAnalysisRequestController } from './ai-analysis-request.controller';
+import { AiAnalysisDomainController } from './ai-analysis-domain.controller';
 
 const useCases = [
     RequestStockAnalysisUseCase,
@@ -23,8 +23,8 @@ const useCases = [
         AiAnalysisReportModule,
         FavoriteStockModule,
     ],
-    controllers: [AiAnalysisRequestController],
+    controllers: [AiAnalysisDomainController],
     providers: useCases,
     exports: useCases,
 })
-export class AiAnalysisRequestModule {}
+export class AiAnalysisDomainModule {}

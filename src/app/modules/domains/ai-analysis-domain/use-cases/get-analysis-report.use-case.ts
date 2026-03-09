@@ -14,7 +14,7 @@ interface GetAnalysisReportPayload {
 @Injectable()
 export class GetAnalysisReportUseCase implements BaseUseCase<
     GetAnalysisReportPayload,
-    AnalysisReportResponseDto
+    Promise<AnalysisReportResponseDto>
 > {
     constructor(
         private readonly aiAnalysisReportService: AiAnalysisReportService,

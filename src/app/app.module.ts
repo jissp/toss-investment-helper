@@ -6,11 +6,12 @@ import { RedisModule } from '@modules/redis';
 import { QueueModule } from '@modules/queue';
 import { SlackModule } from '@modules/slack';
 import { NewsCrawlerModule } from '@app/modules/news-crawler';
+import { AiAnalysisModule } from '@app/modules/ai-analysis';
 import { HealthCheckModule } from '@app/modules/domains/health-check/health-check.module';
 import { FavoriteStockModule } from '@app/modules/domains/favorite-stock';
-import { AiAnalysisRequestModule } from '@app/modules/domains/ai-analysis-request';
+import { AiAnalysisDomainModule } from '@app/modules/domains/ai-analysis-domain';
+import { AnalysisDomainModule } from '@app/modules/domains/analysis';
 import configuration, { IConfiguration } from './configuration';
-import { AiAnalysisModule } from '@app/modules/ai-analysis';
 
 @Module({
     imports: [
@@ -50,7 +51,8 @@ import { AiAnalysisModule } from '@app/modules/ai-analysis';
         HealthCheckModule,
         NewsCrawlerModule,
         FavoriteStockModule,
-        AiAnalysisRequestModule,
+        AiAnalysisDomainModule,
+        AnalysisDomainModule,
     ],
 })
 export class AppModule {}

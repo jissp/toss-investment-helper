@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { FlowProducer } from 'bullmq';
 import { getFlowProducerToken } from '@nestjs/bullmq';
 import { RequestMarketAnalysisParams } from '@app/modules/ai-analysis/analyzers/market-analyzer/market-analyzer.types';
-import { RequestStockAnalysisRequestDto } from '@app/modules/domains/ai-analysis-request';
+import { RequestStockAnalysisRequestDto } from '@app/modules/domains/ai-analysis-domain';
 import { AiAnalysisAdapterType } from './common';
 import { AiAnalysisFlowType } from './ai-analysis.types';
 import { AiAnalysisAdapterFactory } from './ai-analysis-adapter.factory';

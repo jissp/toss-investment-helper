@@ -5,7 +5,7 @@ import {
     SendServerMessageResponse,
 } from '@extension/src/common/types';
 import { TossWatchList } from '@app/common/interfaces/toss/toss.interface';
-import { RequestStockAnalysisRequestDto } from '@app/modules/domains/ai-analysis-request';
+import { RequestStockAnalysisRequestDto } from '@app/modules/domains/ai-analysis-domain';
 
 export class BackendApiService {
     sendHealthCheck() {
@@ -25,10 +25,18 @@ export class BackendApiService {
         });
     }
 
-    requestStockAnalysis(body: RequestStockAnalysisRequestDto) {
+    requestStockAiAnalysis(body: RequestStockAnalysisRequestDto) {
         return this.send({
             method: 'POST',
-            path: '/v1/ai-analysis-request/stock',
+            path: '/v1/ai-analysis/stock',
+            body,
+        });
+    }
+
+    requestStockScoreAnalysis(body: RequestStockAnalysisRequestDto) {
+        return this.send({
+            method: 'POST',
+            path: '/v1/analysis/stock-scores',
             body,
         });
     }

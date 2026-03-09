@@ -14,7 +14,7 @@ interface ListAnalysisReportsPayload {
 @Injectable()
 export class ListAnalysisReportsUseCase implements BaseUseCase<
     ListAnalysisReportsPayload,
-    AnalysisReportsListResponseDto
+    Promise<AnalysisReportsListResponseDto>
 > {
     constructor(
         private readonly aiAnalysisReportService: AiAnalysisReportService,

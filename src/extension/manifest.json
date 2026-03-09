@@ -9,6 +9,12 @@
         "service_worker": "src/background/background.ts",
         "type": "module"
     },
+    "web_accessible_resources": [
+        {
+            "resources": ["src/content/templates/*.html"],
+            "matches": ["https://www.tossinvest.com/*"]
+        }
+    ],
     "content_scripts": [
         {
             "matches": ["https://www.tossinvest.com/*"],

@@ -1,4 +1,3 @@
-import { ComponentType } from '@extension/src/content';
 import { context } from '@extension/src/common/context';
 
 export class SendFavoriteStocksUseCase {
@@ -26,8 +25,8 @@ export class SendFavoriteStocksUseCase {
                 return;
             }
 
-            const requestStockAnalysisButton = this.getButtonElement();
-            if (!requestStockAnalysisButton) {
+            const button = this.getButtonElement();
+            if (!button) {
                 this.installButton();
             }
         } finally {
@@ -53,27 +52,22 @@ export class SendFavoriteStocksUseCase {
      *
      */
     public createButtonElement() {
-        const button = context.componentFactory.create(ComponentType.Button);
+        const element = context.templateService.getTemplate(
+            'src/content/templates/send-favorite-stocks.button.html',
+        );
+        element.addEventListener('click', () => {
+            const handle = async () => {
+                const response = await context.tossWtsApiClient.getWatchLists();
 
-        return button
-            .buildId(this.buttonId)
-            .buildClass(
-                'tw4l-1wkoka52h tw4l-1wkoka59 tw4l-1wkoka5e tw4l-1wkoka517 tw4l-1wkoka5x tw4l-1wkoka5r tw4l-1wkoka5l tw4l-1wkoka528 tw4l-1wkoka537',
-            )
-            .buildText('관심 종목 전송')
-            .buildOnClick(() => {
-                const handle = async () => {
-                    const response =
-                        await context.tossWtsApiClient.getWatchLists();
+                await context.backendApi.putFavoriteStock(
+                    response.result.watchlists,
+                );
+            };
 
-                    await context.backendApi.putFavoriteStock(
-                        response.result.watchlists,
-                    );
-                };
+            handle();
+        });
 
-                handle();
-            })
-            .build();
+        return element;
     }
 
     /**
