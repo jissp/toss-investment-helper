@@ -24,7 +24,7 @@
 ### 초기 환경 설정
 
 1. **환경 변수 설정**
-   `.env` 파일을 루트 디렉토리에 생성하고 필요한 정보를 입력합니다.
+   `.env.prod` 파일을 루트 디렉토리에 생성하고 필요한 정보를 입력합니다.
    ```env
    MONGO_DATABASE_URI="mongodb://toss:helper@mongo:27017"
 
