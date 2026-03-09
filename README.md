@@ -57,6 +57,13 @@
    docker-compose up -d
    ```
 
+3. Gemini Login
+   1. Docker Container로 접속
+      ```
+      docker exec -it [ContainerID] /bin/sh
+      ```
+   2. gemini 실행 후 절차에 따라 Login
+
 ### 크롬 확장 프로그램 빌드 및 설치
 
 1. **확장 프로그램 빌드**

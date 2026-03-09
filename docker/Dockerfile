@@ -1,4 +1,4 @@
-FROM node:22.14.0-alpine3.21 as builder
+FROM node:22.14.0 as builder
 
 ARG NODE_ENV
 
@@ -14,15 +14,15 @@ COPY . .
 RUN npm run build
 RUN cp .env.${NODE_ENV} .env
 
-FROM node:22.4.0-alpine3.20 as runner
+FROM node:22.14.0 as runnder
 
 ARG NODE_ENV
 ENV NODE_ENV=$NODE_ENV
 
-RUN apk add --no-cache \
-    python3 \
-    make \
-    g++
+#RUN apk add --no-cache \
+#    python3 \
+#    make \
+#    g++
 
 RUN npm install -g @google/gemini-cli@latest
 
