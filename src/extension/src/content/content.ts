@@ -1,29 +1,38 @@
-import { context } from '@extension/src/common/context';
-import {
-    RequestStockAiAnalysisUseCase,
-    SendFavoriteStocksUseCase,
-    ShowStockScoreSectionUseCase,
-} from '@extension/src/content/use-cases';
+import { DomObserver, RouterObserver } from '@extension/src/content/observers';
 import { ContentEventListener } from './content-event.listener';
+import { BackendApiService, TemplateService } from './services';
+import { ContentFeature } from './interfaces';
+import {
+    AiAnalysisButtonFeature,
+    FavoriteStocksButtonFeature,
+    StockScoreSectionFeature,
+} from './features';
 
 async function init() {
+    const templateService: TemplateService = TemplateService.getInstance();
+    const backendApiService: BackendApiService =
+        BackendApiService.getInstance();
+
     new ContentEventListener(chrome.runtime.onMessage);
 
     // TossInvestmentHelper 서버가 동작중일 때만 설치합니다.
-    const response = await context.backendApi.sendHealthCheck();
+    const response = await backendApiService.sendHealthCheck();
     if (!response.ok) {
         return;
     }
 
-    await context.templateService.init();
+    RouterObserver.getInstance().initialize();
+    DomObserver.getInstance().initialize();
 
-    const requestStockAnalysisUseCase = new RequestStockAiAnalysisUseCase();
-    const requestStockScoreAnalysisUseCase = new ShowStockScoreSectionUseCase();
-    const sendFavoriteStocksUseCase = new SendFavoriteStocksUseCase();
+    await templateService.init();
 
-    requestStockAnalysisUseCase.execute();
-    requestStockScoreAnalysisUseCase.execute();
-    sendFavoriteStocksUseCase.execute();
+    const features: ContentFeature[] = [
+        new AiAnalysisButtonFeature(),
+        new StockScoreSectionFeature(),
+        new FavoriteStocksButtonFeature(),
+    ];
+
+    features.forEach((f) => f.start());
 }
 
 export const onExecute = async () => {

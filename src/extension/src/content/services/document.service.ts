@@ -1,7 +1,15 @@
 import { Nullable } from '@common/types';
 
 export class DocumentService {
-    constructor() {}
+    private static instance: DocumentService;
+
+    public static getInstance() {
+        if (!this.instance) {
+            this.instance = new DocumentService();
+        }
+
+        return this.instance;
+    }
 
     public getMainElement(): Nullable<HTMLElement> {
         return document.querySelector('div[id="main-content"]')!;

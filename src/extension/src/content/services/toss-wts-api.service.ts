@@ -10,6 +10,8 @@ import {
 import { Config } from '@extension/src/common/config';
 
 export class TossWtsApiService {
+    private static instance: TossWtsApiService;
+
     private readonly certHost: string;
     private readonly infoHost: string;
 
@@ -18,6 +20,14 @@ export class TossWtsApiService {
 
         this.certHost = certHost;
         this.infoHost = infoHost;
+    }
+
+    public static getInstance() {
+        if (!this.instance) {
+            this.instance = new TossWtsApiService();
+        }
+
+        return this.instance;
     }
 
     private async fetch<R = unknown, Body = void>(

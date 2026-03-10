@@ -5,9 +5,19 @@ import {
     SendServerMessageResponse,
 } from '@extension/src/common/types';
 import { TossWatchList } from '@app/common/interfaces/toss/toss.interface';
-import { RequestStockAnalysisRequestDto } from '@app/modules/domains/ai-analysis-domain';
+import { RequestStockAnalysisRequestDto } from '@app/modules/domains/ai-analysis-domain/dto/requests/request-stock-analysis.request.dto';
 
 export class BackendApiService {
+    private static instance: BackendApiService;
+
+    public static getInstance() {
+        if (!this.instance) {
+            this.instance = new BackendApiService();
+        }
+
+        return this.instance;
+    }
+
     sendHealthCheck() {
         return this.send({
             method: 'GET',

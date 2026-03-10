@@ -1,6 +1,16 @@
 import { patterns } from '@extension/src/common/page-patterns';
 
 export class LocationService {
+    private static instance: LocationService;
+
+    public static getInstance() {
+        if (!this.instance) {
+            this.instance = new LocationService();
+        }
+
+        return this.instance;
+    }
+
     public isStockOrderPage(): boolean {
         return patterns.page.stockOrder.test(location.href);
     }

@@ -5,10 +5,18 @@ export class TemplateService {
         'src/content/templates/request-stock-ai-analysis.button.html',
         'src/content/templates/send-favorite-stocks.button.html',
     ];
-
     private readonly loadedTemplates: Record<string, Element> = {};
-
     private readonly parser = new DOMParser();
+
+    private static instance: TemplateService;
+
+    public static getInstance() {
+        if (!this.instance) {
+            this.instance = new TemplateService();
+        }
+
+        return this.instance;
+    }
 
     public async init() {
         await Promise.all(
