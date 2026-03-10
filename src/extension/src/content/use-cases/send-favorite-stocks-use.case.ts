@@ -79,7 +79,7 @@ export class SendFavoriteStocksUseCase {
             return null;
         }
 
-        return main.querySelector(`[id="${this.buttonId}"]`);
+        return main.querySelector(`#${this.buttonId}`);
     }
 
     /**

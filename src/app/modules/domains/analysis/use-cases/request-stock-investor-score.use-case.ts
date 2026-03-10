@@ -80,13 +80,17 @@ export class RequestStockInvestorScoreUseCase implements BaseUseCase<
         let consecutiveDays = 0;
         for (const t of trends) {
             const val = t[key] as number;
-            const isSameDirection = trend === 'net_buy' ? val >= 0 : val < 0;
+            const isSameDirection = trend === 'net_buy' ? val > 0 : val < 0;
             if (isSameDirection) consecutiveDays++;
             else break;
         }
 
         let trendChange: TrendChange = 'none';
-        if (yesterdayValue !== undefined) {
+        if (
+            yesterdayValue !== undefined &&
+            todayValue !== 0 &&
+            yesterdayValue !== 0
+        ) {
             const yesterdayTrend: InvestorTrend =
                 yesterdayValue >= 0 ? 'net_buy' : 'net_sell';
             if (yesterdayTrend !== trend) {

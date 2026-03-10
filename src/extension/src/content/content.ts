@@ -1,8 +1,8 @@
 import { context } from '@extension/src/common/context';
 import {
     RequestStockAiAnalysisUseCase,
-    ShowStockScoreSectionUseCase,
     SendFavoriteStocksUseCase,
+    ShowStockScoreSectionUseCase,
 } from '@extension/src/content/use-cases';
 import { ContentEventListener } from './content-event.listener';
 
@@ -18,8 +18,7 @@ async function init() {
     await context.templateService.init();
 
     const requestStockAnalysisUseCase = new RequestStockAiAnalysisUseCase();
-    const requestStockScoreAnalysisUseCase =
-        new ShowStockScoreSectionUseCase();
+    const requestStockScoreAnalysisUseCase = new ShowStockScoreSectionUseCase();
     const sendFavoriteStocksUseCase = new SendFavoriteStocksUseCase();
 
     requestStockAnalysisUseCase.execute();

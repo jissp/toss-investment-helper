@@ -1,4 +1,34 @@
-<div id="investor-score-section" class="_1n4jthd0" style="height: 270px;">
-    <span class="tw4l-1r5dc8g0"
-          style="--tds-wts-font-weight: var(--tw-font-weight-medium); --tds-wts-foreground-color: var(--wts-adaptive-grey700); --tds-wts-line-height: 1.45; --tds-wts-font-size: 14px;"></span>
+<div id="investor-score-section"
+     style="display: flex; flex-direction: column; gap: 0px; justify-content: normal; align-items: normal; flex: 1 1 0%;">
+  <style>
+      #investor-score-section {
+          position: relative;
+      }
+
+      #investor-score-section .tooltip {
+          position: absolute;
+          left: 0;
+          visibility: hidden;
+          opacity: 0;
+          transform: translateY(10px);
+          transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55); /* 바운스 효과 */
+          z-index: 99999;
+      }
+
+      #investor-score-section:hover .tooltip {
+          visibility: visible;
+          opacity: 1;
+          transform: translateY(0);
+      }
+  </style>
+  <div class="_1qbm89u0">
+    <div class="_1qbm89u2 _1qbm89u1">
+      <div class="_1qbm89u4" style="width: 0%;"></div>
+    </div>
+    <div class="_1qbm89u3 _1qbm89u1">
+      <div class="score_percent _1qbm89u5" style="width: 100%;"></div>
+    </div>
+  </div>
+  <span class="tw4l-1r5dc8g0 tw4l-1h3jdxo4 tw4l-1h3jdxo8 tw4l-1h3jdxo5 f2ww7n2 tooltip"
+        style="--tds-wts-font-weight: var(--tw-font-weight-medium); --tds-wts-foreground-color: var(--wts-adaptive-grey700); --tds-wts-line-height: 1.45; --tds-wts-font-size: 14px;"></span>
 </div>

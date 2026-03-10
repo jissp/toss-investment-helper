@@ -89,7 +89,7 @@ export class RequestStockAiAnalysisUseCase {
             return null;
         }
 
-        return main.querySelector(`[id="${this.buttonId}"]`);
+        return main.querySelector(`#${this.buttonId}`);
     }
 
     /**

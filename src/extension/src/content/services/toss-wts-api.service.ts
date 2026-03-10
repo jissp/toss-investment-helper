@@ -1,13 +1,13 @@
-import { Config } from '@extension/src/common/config';
 import {
     GetIndicesResponse,
+    IndexCode,
     IndicesData,
     NewWatchResponse,
     StockInfo,
     TossWtsResponse,
     TradingTrendResponse,
-} from '@app/common/interfaces/toss/toss.interface';
-import { IndexCode } from '@app/common/interfaces/toss/toss.types';
+} from '@app/common/interfaces/toss';
+import { Config } from '@extension/src/common/config';
 
 export class TossWtsApiService {
     private readonly certHost: string;
@@ -20,85 +20,92 @@ export class TossWtsApiService {
         this.infoHost = infoHost;
     }
 
-    public async getWatchLists<
-        R = TossWtsResponse<NewWatchResponse>,
-    >(): Promise<R> {
-        const response = await fetch(
-            `${this.certHost}/api/v1/new-watchlists?includePrice=true&lazyLoad=false`,
-            {
-                method: 'GET',
-                credentials: 'include',
-            },
-        );
+    private async fetch<R = unknown, Body = void>(
+        method: 'GET' | 'POST' | 'PATCH' | 'DELETE',
+        url: string,
+        body?: Body,
+    ): Promise<TossWtsResponse<R>> {
+        const response = await fetch(url, {
+            method,
+            credentials: 'include',
+            body: body ? JSON.stringify(body) : undefined,
+        });
 
         const json = await response.json();
 
-        return json as R;
+        return json as TossWtsResponse<R>;
+    }
+
+    /**
+     * 관심 종목과 최근 조회 종목 리스트를 조회
+     */
+    public async getWatchLists<R = NewWatchResponse>(): Promise<
+        TossWtsResponse<R>
+    > {
+        return this.fetch<R>(
+            'GET',
+            `${this.certHost}/api/v1/new-watchlists?includePrice=true&lazyLoad=false`,
+        );
     }
 
     /**
      * 종목 정보 조회
      * @param stockCode
      */
-    public async getStockInfo<R = TossWtsResponse<StockInfo>>(
+    public async getStockInfo<R = StockInfo>(
         stockCode: string,
-    ): Promise<R> {
-        const response = await fetch(
+    ): Promise<TossWtsResponse<R>> {
+        return this.fetch<R>(
+            'GET',
             `${this.infoHost}/api/v2/stock-infos/${stockCode}`,
-            {
-                method: 'GET',
-                credentials: 'include',
-            },
         );
-
-        const json = await response.json();
-
-        return json as R;
     }
 
     /**
      * 투자자 동향 조회
      * @param stockCode
      */
-    public async getTradingTrend<R = TossWtsResponse<TradingTrendResponse>>(
+    public async getTradingTrend<R = TradingTrendResponse>(
         stockCode: string,
-    ): Promise<R> {
-        const response = await fetch(
+    ): Promise<TossWtsResponse<R>> {
+        return this.fetch<R>(
+            'GET',
             `${this.infoHost}/api/v1/stock-infos/trade/trend/trading-trend?productCode=${stockCode}&size=60`,
-            {
-                method: 'GET',
-                credentials: 'include',
-            },
         );
-
-        const json = await response.json();
-
-        return json as R;
-    }
-
-    public async getIndices<
-        R = TossWtsResponse<GetIndicesResponse>,
-    >(): Promise<R> {
-        const response = await fetch(
-            `${this.certHost}/api/v3/dashboard/wts/overview/indicator/mini-chart`,
-            {
-                method: 'GET',
-                credentials: 'include',
-            },
-        );
-
-        const json = await response.json();
-
-        return json as R;
     }
 
     /**
-     * 지수 정보를 조회한다.
+     * 뉴스 조회
+     * @param stockSymbol
+     */
+    public async getStockNews<R = TradingTrendResponse>(
+        stockSymbol: string,
+    ): Promise<TossWtsResponse<R>> {
+        return this.fetch<R>(
+            'GET',
+            `${this.infoHost}/api/v2/news/companies/${stockSymbol}?size=20&orderBy=latest`,
+        );
+    }
+
+    /**
+     * 시장 동향 조회
+     */
+    public async getIndices<R = GetIndicesResponse>(): Promise<
+        TossWtsResponse<R>
+    > {
+        return this.fetch<R>(
+            'GET',
+            `${this.certHost}/api/v3/dashboard/wts/overview/indicator/mini-chart`,
+        );
+    }
+
+    /**
+     * 지수 정보 조회
      * @param indexCode
      */
-    public async getIndex<R = TossWtsResponse<IndicesData>>(
+    public async getIndex<R = IndicesData>(
         indexCode: IndexCode,
-    ): Promise<R> {
+    ): Promise<TossWtsResponse<R>> {
         const countryMap: Record<IndexCode, 'kr-s' | 'us-s' | undefined> = {
             [IndexCode['코스피']]: 'kr-s',
             [IndexCode['코스닥']]: 'kr-s',
@@ -120,16 +127,9 @@ export class TossWtsApiService {
 
         const country = countryMap[indexCode];
 
-        const response = await fetch(
+        return this.fetch<R>(
+            'GET',
             `${this.infoHost}/api/v1/c-chart/${country}/${indexCode}/day:1?count=35&useAdjustedRate=true`,
-            {
-                method: 'GET',
-                credentials: 'include',
-            },
         );
-
-        const json = await response.json();
-
-        return json as R;
     }
 }

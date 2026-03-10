@@ -1,6 +1,7 @@
 export class TemplateService {
     private readonly templatePaths: string[] = [
         'src/content/templates/investor-score.section.html',
+        'src/content/templates/investor-score-title.section.html',
         'src/content/templates/request-stock-ai-analysis.button.html',
         'src/content/templates/send-favorite-stocks.button.html',
     ];
