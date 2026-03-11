@@ -3,12 +3,11 @@ import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { InjectModel } from '@nestjs/mongoose';
 import { Job } from 'bullmq';
 import { Model } from 'mongoose';
+import { AiAnalysisReport } from '@app/modules/schemas/ai-analysis-report';
 import {
-    AiAnalysisReport,
-    ReportType,
-} from '@app/modules/schemas/ai-analysis-report';
-import { AiAnalysisFlowType } from '../ai-analysis.types';
-import { RequestStockAnalysisRequestDto } from '@app/modules/domains/ai-analysis-domain';
+    AiAnalysisFlowType,
+    RequestAnalysisFlowPayload,
+} from '../ai-analysis.types';
 
 @Processor(AiAnalysisFlowType.RequestAnalysis)
 export class RequestAnalysisFlowProcessor extends WorkerHost {
@@ -21,14 +20,14 @@ export class RequestAnalysisFlowProcessor extends WorkerHost {
         super();
     }
 
-    async process(job: Job<RequestStockAnalysisRequestDto>): Promise<any> {
-        const { stockSymbol, stockName } = job.data;
+    async process(job: Job<RequestAnalysisFlowPayload>): Promise<any> {
+        const { reportType, reportTarget, title } = job.data;
         const results = await this.getChildrenValues(job);
 
         await this.aiAnalysisReportModel.create({
-            reportType: ReportType.Stock,
-            reportTarget: stockSymbol,
-            title: `${stockName} 종목 분석`,
+            reportType,
+            reportTarget,
+            title,
             content: results[0],
         });
     }

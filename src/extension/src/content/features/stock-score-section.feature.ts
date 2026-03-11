@@ -1,4 +1,4 @@
-import { StockScoreResponseDto } from '@app/modules/domains/analysis/dto/responses/stock-score.response.dto';
+import type { StockScoreResponseDto } from '@app/modules/domains/analysis/dto/responses/stock-score.response.dto';
 import { Nullable } from '@common/types/util.types';
 import { patterns } from '@extension/src/common/page-patterns';
 import {
@@ -50,15 +50,8 @@ export class StockScoreSectionFeature extends ContentFeature {
         this.updateScoreSectionUI(stockCode);
     }
 
-    /**
-     * @param stockCode
-     */
-    async onStockChanged(stockCode: string): Promise<void> {
-        if (this.latestUpdateStockCode === stockCode) {
-            return;
-        }
-
-        await this.updateScoreSectionUI(stockCode);
+    protected uninstall() {
+        this.documentService.removeElement(this.elementId);
     }
 
     /**

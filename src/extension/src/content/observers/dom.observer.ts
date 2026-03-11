@@ -2,6 +2,7 @@ export class DomObserver {
     private static instance: DomObserver;
     private observer!: MutationObserver;
     private watchList = new Map<string, () => void>();
+    private debounceTimer: ReturnType<typeof setTimeout> | null = null;
 
     static getInstance(): DomObserver {
         if (!this.instance) {
@@ -13,13 +14,18 @@ export class DomObserver {
 
     initialize() {
         this.observer = new MutationObserver(() => {
-            console.log('DOM mutation detected');
+            if (this.debounceTimer) {
+                clearTimeout(this.debounceTimer);
+            }
 
-            this.watchList.forEach((reinstall, id) => {
-                if (!document.getElementById(id)) {
-                    reinstall();
-                }
-            });
+            this.debounceTimer = setTimeout(() => {
+                console.log('DOM mutation detected');
+                this.watchList.forEach((reinstall, id) => {
+                    if (!document.getElementById(id)) {
+                        reinstall();
+                    }
+                });
+            }, 200);
         });
 
         this.observer.observe(document.body, {

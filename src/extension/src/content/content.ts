@@ -5,6 +5,7 @@ import { ContentFeature } from './interfaces';
 import {
     AiAnalysisButtonFeature,
     FavoriteStocksButtonFeature,
+    MarketAiAnalysisButtonFeature,
     StockScoreSectionFeature,
 } from './features';
 
@@ -30,6 +31,7 @@ async function init() {
         new AiAnalysisButtonFeature(),
         new StockScoreSectionFeature(),
         new FavoriteStocksButtonFeature(),
+        new MarketAiAnalysisButtonFeature(),
     ];
 
     features.forEach((f) => f.start());

@@ -6,6 +6,7 @@ import {
 } from '@extension/src/common/types';
 import { TossWatchList } from '@app/common/interfaces/toss/toss.interface';
 import { RequestStockAnalysisRequestDto } from '@app/modules/domains/ai-analysis-domain/dto/requests/request-stock-analysis.request.dto';
+import { RequestMarketAnalysisRequestDto } from '@app/modules/domains/ai-analysis-domain/dto/requests/request-market-analysis.request.dto';
 
 export class BackendApiService {
     private static instance: BackendApiService;
@@ -47,6 +48,14 @@ export class BackendApiService {
         return this.send({
             method: 'POST',
             path: '/v1/analysis/stock-scores',
+            body,
+        });
+    }
+
+    requestMarketAiAnalysis(body: RequestMarketAnalysisRequestDto) {
+        return this.send({
+            method: 'POST',
+            path: '/v1/ai-analysis/market',
             body,
         });
     }

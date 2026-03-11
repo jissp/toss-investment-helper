@@ -1,9 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
 import { FlowChildJob } from 'bullmq/dist/esm/interfaces/flow-job';
 import { GeminiCliModel } from '@modules/gemini-cli';
-import { News } from '@app/modules/schemas/news';
 import {
     AiAnalysisAdapterType,
     AiAnalysisQueueType,
@@ -12,13 +9,18 @@ import {
     RequestAiAnalysisTypeParam,
 } from '@app/modules/ai-analysis/common';
 import { MarketAnalyzerQueueType } from './market-analyzer.types';
+import {
+    GlobalCommodityTransformer,
+    GlobalIndexTransformer,
+} from './transformers';
 
 @Injectable()
 export class MarketAnalyzerAdapter implements IBaseAnalysisAdapter<
     RequestAiAnalysisTypeParam<AiAnalysisAdapterType.MARKET>
 > {
     constructor(
-        @InjectModel(News.name) private readonly newsModel: Model<News>,
+        private readonly globalIndexTransformer: GlobalIndexTransformer,
+        private readonly globalCommodityTransformer: GlobalCommodityTransformer,
     ) {}
 
     async execute(
@@ -30,27 +32,31 @@ export class MarketAnalyzerAdapter implements IBaseAnalysisAdapter<
         // 2. 시장 분석 요청 (Gemini 프롬프트로만 처리)
         const childrenJobs = [
             {
-                name: 'AnalyzeMarketTrend',
+                name: '시장 추세 분석',
                 queueName: AiAnalysisQueueType.PromptToGeminiCli,
                 data: {
-                    prompt: '',
-                    model: GeminiCliModel.Gemini3Flash,
+                    prompt: this.globalIndexTransformer.transform({
+                        indices: params.indices,
+                    }),
+                    model: GeminiCliModel.Gemini3Pro,
                 } as PromptToGeminiCliParams,
             },
             {
-                name: 'GenerateMarketReport',
+                name: '원자재 추세 분석',
                 queueName: AiAnalysisQueueType.PromptToGeminiCli,
                 data: {
-                    prompt: '',
-                    model: GeminiCliModel.Gemini3Flash,
-                },
+                    prompt: this.globalCommodityTransformer.transform({
+                        indices: params.indices,
+                    }),
+                    model: GeminiCliModel.Gemini3Pro,
+                } as PromptToGeminiCliParams,
             },
         ];
 
         return {
             name: '마켓 시장 분석',
             queueName: MarketAnalyzerQueueType.RequestMarketAnalysis,
-            data: {},
+            data: params,
             children: childrenJobs,
         };
     }

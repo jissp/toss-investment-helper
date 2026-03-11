@@ -6,16 +6,18 @@
 
 - **프로젝트명**: Toss Investment Helper
 - **주요 기능**:
-  - 토스증권 웹 사이트 확장 기능 (Chrome Extension)
-    - 종목 분석 추가 (관심 종목 추가/해제 버튼 옆)
-      ![img.png](assets/img.png)
-  - Gemini AI를 활용한 뉴스 및 종목 분석
-  - 구글 RSS 및 네이버 뉴스를 통한 실시간 정보 수집
-  - Slack을 통한 분석 결과 알림 및 로그 확인
+    - 토스증권 웹 사이트 확장 기능 (Chrome Extension)
+        - 종목 AI 분석 추가 (관심 종목 추가/해제 버튼 옆)
+          ![img.png](assets/request-ai-analysis.png)
+        - 투자자 동향 - 위험도
+          ![img.png](assets/investor-score.png)
+    - Gemini AI를 활용한 뉴스 및 종목 분석
+    - 구글 RSS 및 네이버 뉴스를 통한 실시간 정보 수집
+    - Slack을 통한 분석 결과 알림 및 로그 확인
 - **기술 스택**:
-  - **Backend**: TypeScript (NestJS), MongoDB, Redis (BullMQ)
-  - **Chrome Extension**: Vite, CRXJS, TypeScript
-  - **AI**: Gemini AI Integration
+    - **Backend**: TypeScript (NestJS), MongoDB, Redis (BullMQ)
+    - **Chrome Extension**: Vite, CRXJS, TypeScript
+    - **AI**: Gemini AI Integration
 
 ---
 
@@ -58,11 +60,11 @@
    ```
 
 3. Gemini Login
-   1. Docker Container로 접속
-      ```
-      docker exec -it [ContainerID] /bin/sh
-      ```
-   2. gemini 실행 후 절차에 따라 Login
+    1. Docker Container로 접속
+       ```
+       docker exec -it [ContainerID] /bin/sh
+       ```
+    2. gemini 실행 후 절차에 따라 Login
 
 ### 크롬 확장 프로그램 빌드 및 설치
 
@@ -72,9 +74,9 @@
    ```
 
 2. **확장 프로그램 로드**
-   - Chrome 브라우저에서 `chrome://extensions/` 접속
-   - '압축해제된 확장 프로그램을 로드합니다' (Load unpacked) 클릭
-   - 프로젝트 내 `src/extension/dist` 폴더 선택
+    - Chrome 브라우저에서 `chrome://extensions/` 접속
+    - '압축해제된 확장 프로그램을 로드합니다' (Load unpacked) 클릭
+    - 프로젝트 내 `src/extension/dist` 폴더 선택
 
 ---
 
@@ -83,9 +85,11 @@
 ### 토스증권 확장 프로그램 (Chrome Extension)
 
 #### AI 뉴스 분석 (AI Analysis)
+
 - **Gemini AI 활용**: 수집된 뉴스의 핵심 내용을 요약하고, 해당 뉴스가 시장이나 특정 종목에 미칠 영향을 분석합니다.
 - **마켓/스톡 애널라이저**: 거시적인 시장 상황 분석과 개별 종목 분석을 별도 프로세스로 처리합니다.
 
 ### 자동화된 뉴스 수집 (News Crawler)
+
 - **멀티 소스**: 구글 RSS와 네이버 검색 API를 통해 실시간으로 투자 관련 뉴스를 크롤링합니다.
 - **스케줄링**: 주기적으로 뉴스를 수집하고 중복을 제거하여 데이터베이스에 저장합니다.

@@ -8,7 +8,7 @@ export function normalizeError(error: unknown): Error {
         return new Error(error.message);
     }
 
-    if (error instanceof Error) {
+    if (Error.isError(error)) {
         return error;
     }
 

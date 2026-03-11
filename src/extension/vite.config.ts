@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
 import { crx } from '@crxjs/vite-plugin';
-import manifest from './manifest.json';
 import path from 'node:path';
+import manifest from './manifest.json';
 
 export default defineConfig({
     plugins: [crx({ manifest })],
@@ -16,6 +16,9 @@ export default defineConfig({
         alias: {
             '@extension': path.resolve(__dirname, '.'),
             '@app': path.resolve(__dirname, '../app'),
+            '@assets': path.resolve(__dirname, '../assets'),
+            '@common': path.resolve(__dirname, '../common'),
+            '@modules': path.resolve(__dirname, '../modules'),
         },
     },
 });

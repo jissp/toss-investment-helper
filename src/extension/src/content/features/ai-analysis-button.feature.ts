@@ -44,6 +44,10 @@ export class AiAnalysisButtonFeature extends ContentFeature {
         group.append(button);
     }
 
+    protected uninstall() {
+        this.documentService.removeElement(this.elementId);
+    }
+
     /**
      * @param url
      */

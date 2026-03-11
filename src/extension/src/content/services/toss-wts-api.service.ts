@@ -10,10 +10,39 @@ import {
 import { Config } from '@extension/src/common/config';
 
 export class TossWtsApiService {
-    private static instance: TossWtsApiService;
+    private readonly countryMap: Record<IndexCode, 'kr-s' | 'us-s'> = {
+        [IndexCode['KOSPI']]: 'kr-s',
+        [IndexCode['KOSDAQ']]: 'kr-s',
+        [IndexCode['NASDAQ']]: 'us-s',
+        [IndexCode['나스닥100 선물']]: 'us-s',
+        [IndexCode['INDEXSP']]: 'us-s',
+        [IndexCode['DJI']]: 'us-s',
+        [IndexCode['SOX']]: 'us-s',
+        [IndexCode['VIX']]: 'us-s',
+        [IndexCode['GOLD']]: 'us-s',
+        [IndexCode['SILVER']]: 'us-s',
+        [IndexCode['WTI']]: 'us-s',
+        [IndexCode['NGJ6']]: 'us-s',
+        [IndexCode['COPPER']]: 'us-s',
+        [IndexCode['WHEAT']]: 'us-s',
+        [IndexCode['달러 인덱스']]: 'us-s',
+        [IndexCode['달러 환율']]: 'us-s',
+        [IndexCode['미국 국채 2년']]: 'us-s',
+        [IndexCode['미국 국채 5년']]: 'us-s',
+        [IndexCode['미국 국채 10년']]: 'us-s',
+        [IndexCode['미국 국채 30년']]: 'us-s',
+        [IndexCode['한국 국채 2년']]: 'kr-s',
+        [IndexCode['한국 국채 3년']]: 'kr-s',
+        [IndexCode['한국 국채 5년']]: 'kr-s',
+        [IndexCode['한국 국채 10년']]: 'kr-s',
+        [IndexCode['한국 국채 20년']]: 'kr-s',
+        [IndexCode['한국 국채 30년']]: 'kr-s',
+    };
 
     private readonly certHost: string;
     private readonly infoHost: string;
+
+    private static instance: TossWtsApiService;
 
     constructor() {
         const { certHost, infoHost } = Config.toss.wts;
@@ -116,26 +145,7 @@ export class TossWtsApiService {
     public async getIndex<R = IndicesData>(
         indexCode: IndexCode,
     ): Promise<TossWtsResponse<R>> {
-        const countryMap: Record<IndexCode, 'kr-s' | 'us-s' | undefined> = {
-            [IndexCode['코스피']]: 'kr-s',
-            [IndexCode['코스닥']]: 'kr-s',
-            [IndexCode['나스닥']]: 'us-s',
-            [IndexCode['나스닥100 선물']]: 'us-s',
-            [IndexCode['S&P500']]: 'us-s',
-            [IndexCode['다우존스']]: 'us-s',
-            [IndexCode['필라델피아 반도체']]: 'us-s',
-            [IndexCode['VIX']]: 'us-s',
-            [IndexCode['금']]: 'us-s',
-            [IndexCode['은']]: 'us-s',
-            [IndexCode['원유']]: 'us-s',
-            [IndexCode['천연가스']]: 'us-s',
-            [IndexCode['구리']]: 'us-s',
-            [IndexCode['밀']]: 'us-s',
-            [IndexCode['한국국채']]: undefined,
-            [IndexCode['미국국채']]: undefined,
-        };
-
-        const country = countryMap[indexCode];
+        const country = this.countryMap[indexCode];
 
         return this.fetch<R>(
             'GET',

@@ -1,10 +1,16 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { FlowProducer } from 'bullmq';
 import { getFlowProducerToken } from '@nestjs/bullmq';
-import { RequestMarketAnalysisParams } from '@app/modules/ai-analysis/analyzers/market-analyzer/market-analyzer.types';
-import { RequestStockAnalysisRequestDto } from '@app/modules/domains/ai-analysis-domain';
+import { ReportType } from '@app/modules/schemas/ai-analysis-report';
+import {
+    RequestMarketAnalysisRequestDto,
+    RequestStockAnalysisRequestDto,
+} from '@app/modules/domains/ai-analysis-domain';
 import { AiAnalysisAdapterType } from './common';
-import { AiAnalysisFlowType } from './ai-analysis.types';
+import {
+    AiAnalysisFlowType,
+    RequestAnalysisFlowPayload,
+} from './ai-analysis.types';
 import { AiAnalysisAdapterFactory } from './ai-analysis-adapter.factory';
 
 @Injectable()
@@ -35,7 +41,11 @@ export class AiAnalysisService {
         await this.requestAnalysisFlowProducer.add({
             name: 'AI 분석 요청',
             queueName: AiAnalysisFlowType.RequestAnalysis,
-            data: params,
+            data: {
+                reportType: ReportType.Stock,
+                reportTarget: params.stockSymbol,
+                title: `${params.stockName} 종목 분석`,
+            } as RequestAnalysisFlowPayload,
             children: [childrenJobs],
         });
     }
@@ -49,7 +59,7 @@ export class AiAnalysisService {
      * 3. Flow Job에 Children Job 등록
      */
     async requestMarketAnalysis(
-        params: RequestMarketAnalysisParams,
+        params: RequestMarketAnalysisRequestDto,
     ): Promise<void> {
         const adapter = this.adapterFactory.getAdapter(
             AiAnalysisAdapterType.MARKET,
@@ -60,6 +70,11 @@ export class AiAnalysisService {
         await this.requestAnalysisFlowProducer.add({
             name: 'AI 분석 요청',
             queueName: AiAnalysisFlowType.RequestAnalysis,
+            data: {
+                reportType: ReportType.Market,
+                reportTarget: params.marketType,
+                title: `${params.marketType} 시장 분석`,
+            } as RequestAnalysisFlowPayload,
             children: [childrenJobs],
         });
     }

@@ -3,6 +3,7 @@ export class TemplateService {
         'src/content/templates/investor-score.section.html',
         'src/content/templates/investor-score-title.section.html',
         'src/content/templates/request-stock-ai-analysis.button.html',
+        'src/content/templates/request-market-ai-analysis.button.html',
         'src/content/templates/send-favorite-stocks.button.html',
     ];
     private readonly loadedTemplates: Record<string, Element> = {};

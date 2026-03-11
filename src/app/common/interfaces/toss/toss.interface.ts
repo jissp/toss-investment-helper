@@ -1,4 +1,7 @@
-import { WatchListType } from '@app/common/interfaces/toss/toss.types';
+import {
+    IndexCode,
+    WatchListType,
+} from '@app/common/interfaces/toss/toss.types';
 import { Nullable } from '@common/types';
 
 export interface TossWtsResponse<T> {
@@ -96,7 +99,7 @@ export interface MiniChart {
 }
 
 export interface IndicesItem {
-    code: string;
+    code: IndexCode;
     name: string;
     displayName: string;
     logoImageUrl: string;

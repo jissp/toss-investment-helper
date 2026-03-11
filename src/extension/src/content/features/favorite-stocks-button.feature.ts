@@ -37,6 +37,10 @@ export class FavoriteStocksButtonFeature extends ContentFeature {
         return button;
     }
 
+    protected uninstall() {
+        this.documentService.removeElement(this.elementId);
+    }
+
     /**
      * @param url
      */

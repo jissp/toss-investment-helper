@@ -26,4 +26,11 @@ export class DocumentService {
 
         return main.querySelector('[id="ts-lnb"]')?.parentElement || null;
     }
+
+    /**
+     * @param elementId
+     */
+    public removeElement(elementId: string) {
+        document.getElementById(elementId)?.remove();
+    }
 }

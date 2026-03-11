@@ -11,6 +11,7 @@ export abstract class ContentFeature {
     protected abstract isTargetPage(url: string): boolean;
 
     protected abstract install(): void;
+    protected abstract uninstall(): void;
 
     public start() {
         this.unsubscribeUrl = this.routerObserver.onUrlChange((url) => {
@@ -27,6 +28,7 @@ export abstract class ContentFeature {
     private handleUrlChange(url: string) {
         if (!this.isTargetPage(url)) {
             this.domObserver.removeWatchId(this.elementId);
+            this.uninstall();
             return;
         }
 

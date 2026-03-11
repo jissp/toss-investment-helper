@@ -11,20 +11,13 @@ export class RouterObserver {
     }
 
     initialize() {
-        const patch = (method: 'pushState' | 'replaceState') => {
-            const original = history[method].bind(history);
-            history[method] = (
-                ...args: Parameters<typeof history.pushState>
-            ) => {
-                original(...args);
-                this.emit(location.href);
-            };
-        };
+        if (!window.navigation) {
+            return;
+        }
 
-        // history의 일부 메소드에 대해서 이벤트를 발행하는 기능을 Wrap한다.
-        patch('pushState');
-        patch('replaceState');
-        window.addEventListener('popstate', () => this.emit(location.href));
+        window.navigation.addEventListener('navigate', (event) => {
+            this.emit(event.destination.url);
+        });
     }
 
     /**

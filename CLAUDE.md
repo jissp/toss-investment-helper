@@ -5,6 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## 프로젝트 개요
 
 토스증권 사용자의 투자 결정을 돕는 AI 기반 투자 보조 도구.
+
 - **NestJS 백엔드**: 뉴스 크롤링, Gemini AI 분석, Slack 알림
 - **Chrome Extension**: Vite + CRXJS 기반, 토스증권 페이지에 UI 주입
 - **인프라**: MongoDB(데이터 저장), Redis/BullMQ(비동기 작업 큐)
@@ -75,10 +76,12 @@ src/
 **UseCase 패턴**: 모든 비즈니스 로직은 `BaseUseCase<T, R>` 인터페이스를 구현하는 UseCase 클래스에 위치. Controller는 UseCase만 호출.
 
 **BullMQ Flow**: AI 분석 요청은 `AiAnalysisService` → `FlowProducer`를 통해 비동기 처리.
+
 - 부모 Job(`RequestAnalysisFlow`) → 자식 Job(`PromptToGeminiCli`) 구조
 - `QueueModule.forFeature({ queueTypes, flowTypes })` 로 모듈별 큐 등록
 
 **Path Aliases** (tsconfig 기준):
+
 - `@app/*` → `src/app/*`
 - `@modules/*` → `src/modules/*`
 - `@common/*` → `src/common/*`
@@ -100,6 +103,7 @@ src/
 
 ## 환경 설정
 
-`.env` 파일 필수 (개발: `.env`, 프로덕션: `.env.prod`). 모든 환경변수는 `src/app/configuration.ts`에서 관리. 모든 환경변수가 존재하지 않으면 앱 기동 시 `NotFoundException` 발생.
+`.env` 파일 필수 (개발: `.env`, 프로덕션: `.env.prod`). 모든 환경변수는 `src/app/configuration.ts`에서 관리. 모든 환경변수가 존재하지 않으면 앱 기동 시
+`NotFoundException` 발생.
 
 Gemini 사용을 위해 `gemini` CLI가 설치되어 있어야 하며, Docker 환경에서는 컨테이너 내에서 별도 로그인 필요.

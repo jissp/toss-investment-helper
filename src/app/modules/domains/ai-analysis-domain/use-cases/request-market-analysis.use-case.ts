@@ -11,8 +11,6 @@ export class RequestMarketAnalysisUseCase implements BaseUseCase<
     constructor(private readonly aiAnalysisService: AiAnalysisService) {}
 
     async execute(payload: RequestMarketAnalysisRequestDto): Promise<void> {
-        await this.aiAnalysisService.requestMarketAnalysis({
-            marketType: payload.marketType,
-        });
+        await this.aiAnalysisService.requestMarketAnalysis(payload);
     }
 }

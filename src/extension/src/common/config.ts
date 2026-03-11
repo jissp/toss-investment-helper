@@ -1,11 +1,11 @@
 export const Config = {
     helper: {
-        host: 'http://localhost:3000',
+        host: import.meta.env.VITE_HELPER_HOST,
     },
     toss: {
         wts: {
-            certHost: 'https://wts-cert-api.tossinvest.com',
-            infoHost: 'https://wts-info-api.tossinvest.com',
+            certHost: import.meta.env.VITE_TOSS_WTS_CERT_HOST,
+            infoHost: import.meta.env.VITE_TOSS_WTS_INFO_HOST,
         },
     },
 };
