@@ -52,7 +52,7 @@ const strategies = [NaverStrategy, GoogleBusinessStrategy];
                 >();
 
                 map.set(NewsStrategy.Naver, naverStrategy);
-                map.set(NewsStrategy.GoogleBusiness, googleBusinessStrategy);
+                map.set(NewsStrategy.Google, googleBusinessStrategy);
 
                 return map;
             },

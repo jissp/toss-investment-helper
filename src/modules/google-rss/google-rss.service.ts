@@ -19,4 +19,13 @@ export class GoogleRssService {
             this.config.business,
         );
     }
+
+    /**
+     * Google News에서 세계 이슈 뉴스를 조회합니다.
+     */
+    public async getGlobalNews(): Promise<GoogleRssItem[]> {
+        return await this.rssReaderService.readFeed<GoogleRssItem>(
+            this.config.global,
+        );
+    }
 }

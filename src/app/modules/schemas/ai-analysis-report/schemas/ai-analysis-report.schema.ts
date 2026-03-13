@@ -1,6 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
-import { ReportType } from '../ai-analysis-report.types';
 
 @Schema({
     collection: 'ai_analysis_reports',
@@ -10,12 +9,12 @@ export class AiAnalysisReport {
     /**
      * 리포트 유형
      */
-    @Prop({ type: String, enum: ReportType, required: true })
+    @Prop({ type: String, required: true })
     @ApiProperty({
-        enum: ReportType,
+        type: String,
         description: '리포트 유형',
     })
-    reportType!: ReportType;
+    reportType!: string;
 
     /**
      * 분석 대상

@@ -10,11 +10,11 @@ import {
 import { BaseStrategy } from './base-strategy';
 
 @Injectable()
-export class GoogleBusinessStrategy extends BaseStrategy<
+export class GoogleGlobalIssueStrategy extends BaseStrategy<
     NewsStrategy.Google,
     GoogleRssItem
 > {
-    private readonly logger = new Logger(GoogleBusinessStrategy.name);
+    private readonly logger = new Logger(GoogleGlobalIssueStrategy.name);
 
     constructor(private readonly googleRssService: GoogleRssService) {
         super();
@@ -23,7 +23,7 @@ export class GoogleBusinessStrategy extends BaseStrategy<
     protected async fetch(
         job: Job<RequestCrawlingNewsJobPayload<NewsStrategy.Google>>,
     ): Promise<GoogleRssItem[]> {
-        return await this.googleRssService.getBusinessNews();
+        return await this.googleRssService.getGlobalNews();
     }
 
     protected transform(value: GoogleRssItem): NewsDto {

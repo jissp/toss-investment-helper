@@ -9,6 +9,7 @@ export interface IConfiguration {
     rss: {
         google: {
             business: string;
+            global: string;
         };
     };
     gemini: {
@@ -49,6 +50,7 @@ export default (): IConfiguration => ({
     rss: {
         google: {
             business: getEnv('GOOGLE_RSS_BUSINESS'),
+            global: getEnv('GOOGLE_RSS_GLOBAL'),
         },
     },
     naver: {

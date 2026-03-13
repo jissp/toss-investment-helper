@@ -8,14 +8,12 @@ export enum NewsCrawlerQueueType {
 
 export enum NewsStrategy {
     Naver = 'Naver',
-    StockPlus = 'StockPlus',
-    GoogleBusiness = 'GoogleBusiness',
+    Google = 'Google',
 }
 
 export interface NewsStrategyPayloadMap {
     [NewsStrategy.Naver]: void;
-    [NewsStrategy.StockPlus]: void;
-    [NewsStrategy.GoogleBusiness]: void;
+    [NewsStrategy.Google]: void;
 }
 
 export type BaseStrategyPayload<T extends NewsStrategy> =

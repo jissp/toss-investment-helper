@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { AiAnalysisReportDto, ReportType } from './ai-analysis-report.types';
+import { AiAnalysisReportDto } from './ai-analysis-report.types';
 import { AiAnalysisReport } from './schemas/ai-analysis-report.schema';
 
 @Injectable()
@@ -24,7 +24,7 @@ export class AiAnalysisReportService {
      * @param reportType
      * @param reportTarget
      */
-    public async clearReport(reportType: ReportType, reportTarget: string) {
+    public async clearReport(reportType: string, reportTarget: string) {
         return this.aiAnalysisReportModel.deleteMany({
             reportType,
             reportTarget,
@@ -40,7 +40,7 @@ export class AiAnalysisReportService {
         reportType,
         reportTarget,
     }: {
-        reportType: ReportType;
+        reportType: string;
         reportTarget: string;
     }) {
         return this.aiAnalysisReportModel
@@ -60,7 +60,7 @@ export class AiAnalysisReportService {
         reportType,
         limit = 10,
     }: {
-        reportType: ReportType;
+        reportType: string;
         limit?: number;
     }) {
         return this.aiAnalysisReportModel

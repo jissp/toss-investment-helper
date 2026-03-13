@@ -1,4 +1,4 @@
 export enum NewsCategory {
     Naver = 'Naver',
-    GoogleBusiness = 'GoogleBusiness',
+    Google = 'Google',
 }
