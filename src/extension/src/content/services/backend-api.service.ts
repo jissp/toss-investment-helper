@@ -60,6 +60,13 @@ export class BackendApiService {
         });
     }
 
+    requestLatestNewsAiAnalysis() {
+        return this.send({
+            method: 'POST',
+            path: '/v1/ai-analysis/latest-news',
+        });
+    }
+
     private async send(
         message: SendServerMessageBody,
     ): Promise<SendServerMessageResponse> {

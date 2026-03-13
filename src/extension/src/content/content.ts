@@ -4,8 +4,7 @@ import { BackendApiService, TemplateService } from './services';
 import { ContentFeature } from './interfaces';
 import {
     AiAnalysisButtonFeature,
-    FavoriteStocksButtonFeature,
-    MarketAiAnalysisButtonFeature,
+    LatestNewsAiAnalysisButtonFeature,
     StockScoreSectionFeature,
 } from './features';
 
@@ -30,8 +29,7 @@ async function init() {
     const features: ContentFeature[] = [
         new AiAnalysisButtonFeature(),
         new StockScoreSectionFeature(),
-        new FavoriteStocksButtonFeature(),
-        new MarketAiAnalysisButtonFeature(),
+        new LatestNewsAiAnalysisButtonFeature(),
     ];
 
     features.forEach((f) => f.start());

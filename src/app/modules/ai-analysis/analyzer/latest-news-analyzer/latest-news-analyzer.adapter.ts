@@ -36,6 +36,7 @@ export class LatestNewsAnalyzerAdapter implements IBaseAnalysisAdapter<AiAnalysi
             .find({
                 category: NewsCategory.Google,
             })
+            .sort({ publishedAt: -1 })
             .limit(40)
             .lean();
 
