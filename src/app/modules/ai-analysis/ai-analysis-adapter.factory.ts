@@ -1,26 +1,19 @@
-import { Injectable } from '@nestjs/common';
-import { StockAnalyzerAdapter } from '@app/modules/ai-analysis/analyzers/stock-analyzer';
-import { MarketAnalyzerAdapter } from '@app/modules/ai-analysis/analyzers/market-analyzer';
-import { IBaseAnalysisAdapter } from './common';
-import {
-    AiAnalysisAdapterType,
-    RequestAiAnalysisTypeParam,
-} from './common/ai-analysis.types';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import type { AiAnalysisAdapterMap } from './interfaces';
+import { AiAnalysisType, IBaseAnalysisAdapter } from './interfaces';
+import { LatestNewsAnalyzerAdapter, StockAnalyzerAdapter } from './analyzer';
 
 @Injectable()
 export class AiAnalysisAdapterFactory {
-    private readonly adapterMap: Record<
-        AiAnalysisAdapterType,
-        IBaseAnalysisAdapter
-    >;
+    private readonly adapterMap: AiAnalysisAdapterMap;
 
     constructor(
-        stockAnalysisAdapter: StockAnalyzerAdapter,
-        marketAnalysisAdapter: MarketAnalyzerAdapter,
+        private readonly stockAnalyzerAdapter: StockAnalyzerAdapter,
+        private readonly latestNewsAnalyzer: LatestNewsAnalyzerAdapter,
     ) {
         this.adapterMap = {
-            [AiAnalysisAdapterType.STOCK]: stockAnalysisAdapter,
-            [AiAnalysisAdapterType.MARKET]: marketAnalysisAdapter,
+            [AiAnalysisType.Stock]: this.stockAnalyzerAdapter,
+            [AiAnalysisType.LatestNews]: this.latestNewsAnalyzer,
         };
     }
 
@@ -28,13 +21,12 @@ export class AiAnalysisAdapterFactory {
      * 분석 타입에 맞는 Adapter를 반환합니다.
      * 이미 생성된 provider 인스턴스를 그대로 반환합니다.
      */
-    getAdapter<T extends AiAnalysisAdapterType>(
-        type: T,
-    ): IBaseAnalysisAdapter<RequestAiAnalysisTypeParam<T>> {
+    getAdapter<T extends AiAnalysisType>(type: T): IBaseAnalysisAdapter<T> {
         const adapter = this.adapterMap[type];
         if (!adapter) {
-            throw new Error(`Unknown adapter type: ${type}`);
+            throw new BadRequestException(`Unknown adapter type: ${type}`);
         }
-        return adapter as IBaseAnalysisAdapter<RequestAiAnalysisTypeParam<T>>;
+
+        return adapter;
     }
 }

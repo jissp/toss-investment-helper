@@ -1,13 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { BaseUseCase } from '@app/common/types';
-import {
-    AiAnalysisReportService,
-    ReportType,
-} from '@app/modules/schemas/ai-analysis-report';
+import { AiAnalysisReportService } from '@app/modules/schemas/ai-analysis-report';
 import { AnalysisReportsListResponseDto } from '../dto';
 
 interface ListAnalysisReportsPayload {
-    reportType: ReportType;
+    reportType: string;
     limit?: number;
 }
 

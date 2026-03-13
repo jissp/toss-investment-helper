@@ -1,4 +1,3 @@
-// 1. 변환 함수 정의
 export function replaceTemplate(template: string, data: object): string {
     Object.entries(data).map(([key, value]) => {
         if (typeof value === 'string' || typeof value === 'number') {

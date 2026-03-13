@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
+import type { Nullable } from '@common/types';
 
 @Schema({
     collection: 'ai_analysis_reports',
@@ -19,12 +20,12 @@ export class AiAnalysisReport {
     /**
      * 분석 대상
      */
-    @Prop({ type: String, required: true, maxlength: 255 })
+    @Prop({ type: String, required: false, default: null, maxlength: 255 })
     @ApiProperty({
         type: String,
         description: '분석 대상',
     })
-    reportTarget!: string;
+    reportTarget: Nullable<string> = null;
 
     /**
      * 리포트 제목

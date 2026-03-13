@@ -18,23 +18,21 @@ import {
 import {
     AnalysisReportResponseDto,
     AnalysisReportsListResponseDto,
-    RequestMarketAnalysisRequestDto,
     RequestStockAnalysisRequestDto,
 } from './dto';
 import {
     GetAnalysisReportUseCase,
     ListAnalysisReportsUseCase,
-    RequestMarketAnalysisUseCase,
+    RequestLatestNewsAnalysisUseCase,
     RequestStockAnalysisUseCase,
 } from './use-cases';
-import { ReportType } from '@app/modules/schemas/ai-analysis-report';
 
 @ApiTags('AI Analysis Request')
 @Controller('v1/ai-analysis')
 export class AiAnalysisDomainController {
     constructor(
         private readonly requestStockAnalysisUseCase: RequestStockAnalysisUseCase,
-        private readonly requestMarketAnalysisUseCase: RequestMarketAnalysisUseCase,
+        private readonly requestLatestNewsAnalysisUseCase: RequestLatestNewsAnalysisUseCase,
         private readonly getAnalysisReportUseCase: GetAnalysisReportUseCase,
         private readonly listAnalysisReportsUseCase: ListAnalysisReportsUseCase,
     ) {}
@@ -57,11 +55,11 @@ export class AiAnalysisDomainController {
         await this.requestStockAnalysisUseCase.execute(body);
     }
 
-    @Post('market')
+    @Post('latest-news')
     @HttpCode(201)
     @ApiOperation({
-        summary: '시장 동향 분석 요청',
-        description: '시장 동향에 대한 AI 분석을 요청합니다.',
+        summary: '최신 뉴스 정보 요약',
+        description: '최신 뉴스 정보를 요약합니다.',
     })
     @ApiCreatedResponse({
         description: '분석 요청이 등록되었습니다.',
@@ -69,10 +67,8 @@ export class AiAnalysisDomainController {
     @ApiBadRequestResponse({
         description: '요청 데이터 검증 실패',
     })
-    async requestMarketAnalysis(
-        @Body() body: RequestMarketAnalysisRequestDto,
-    ): Promise<void> {
-        await this.requestMarketAnalysisUseCase.execute(body);
+    async requestLatestNewsAnalysis(): Promise<void> {
+        await this.requestLatestNewsAnalysisUseCase.execute();
     }
 
     @Get('reports/:reportType/:reportTarget')
@@ -88,7 +84,7 @@ export class AiAnalysisDomainController {
         description: '분석 리포트를 찾을 수 없음',
     })
     async getAnalysisReport(
-        @Param('reportType') reportType: ReportType,
+        @Param('reportType') reportType: string,
         @Param('reportTarget') reportTarget: string,
     ): Promise<AnalysisReportResponseDto> {
         return this.getAnalysisReportUseCase.execute({
@@ -107,7 +103,7 @@ export class AiAnalysisDomainController {
         description: '분석 리포트 목록 조회 성공',
     })
     async listAnalysisReports(
-        @Query('reportType') reportType: ReportType,
+        @Query('reportType') reportType: string,
         @Query('limit') limit?: number,
     ): Promise<AnalysisReportsListResponseDto> {
         return this.listAnalysisReportsUseCase.execute({

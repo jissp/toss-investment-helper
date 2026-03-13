@@ -4,10 +4,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Job } from 'bullmq';
 import { Model } from 'mongoose';
 import { AiAnalysisReport } from '@app/modules/schemas/ai-analysis-report';
-import {
-    AiAnalysisFlowType,
-    RequestAnalysisFlowPayload,
-} from '../ai-analysis.types';
+import { AiAnalysisFlowType, RequestAiReportPayload } from '../interfaces';
 
 @Processor(AiAnalysisFlowType.RequestAnalysis)
 export class RequestAnalysisFlowProcessor extends WorkerHost {
@@ -20,7 +17,7 @@ export class RequestAnalysisFlowProcessor extends WorkerHost {
         super();
     }
 
-    async process(job: Job<RequestAnalysisFlowPayload>): Promise<any> {
+    async process(job: Job<RequestAiReportPayload>): Promise<void> {
         const { reportType, reportTarget, title } = job.data;
         const results = await this.getChildrenValues(job);
 

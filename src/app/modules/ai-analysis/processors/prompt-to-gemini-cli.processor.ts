@@ -3,10 +3,8 @@ import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { Job } from 'bullmq';
 import { GeminiCliService } from '@modules/gemini-cli';
 import { SlackService } from '@modules/slack';
-import {
-    AiAnalysisQueueType,
-    PromptToGeminiCliParams,
-} from '../common/ai-analysis.types';
+import { AiAnalysisQueueType } from '../interfaces';
+import { PromptToGeminiCliParams } from '../ai-analysis-job.factory';
 
 @Processor(AiAnalysisQueueType.PromptToGeminiCli, {
     concurrency: 2,
@@ -21,7 +19,7 @@ export class PromptToGeminiCliProcessor extends WorkerHost {
         super();
     }
 
-    async process(job: Job<PromptToGeminiCliParams>): Promise<any> {
+    async process(job: Job<PromptToGeminiCliParams>): Promise<string> {
         try {
             const { prompt, model } = job.data;
 

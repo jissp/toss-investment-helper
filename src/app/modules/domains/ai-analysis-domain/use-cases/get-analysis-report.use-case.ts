@@ -1,13 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { BaseUseCase } from '@app/common/types';
-import {
-    AiAnalysisReportService,
-    ReportType,
-} from '@app/modules/schemas/ai-analysis-report';
+import { AiAnalysisReportService } from '@app/modules/schemas/ai-analysis-report';
 import { AnalysisReportResponseDto } from '../dto';
 
 interface GetAnalysisReportPayload {
-    reportType: ReportType;
+    reportType: string;
     reportTarget: string;
 }
 

@@ -5,14 +5,14 @@ import { AiAnalysisModule } from '@app/modules/ai-analysis';
 import {
     GetAnalysisReportUseCase,
     ListAnalysisReportsUseCase,
-    RequestMarketAnalysisUseCase,
+    RequestLatestNewsAnalysisUseCase,
     RequestStockAnalysisUseCase,
 } from './use-cases';
 import { AiAnalysisDomainController } from './ai-analysis-domain.controller';
 
 const useCases = [
     RequestStockAnalysisUseCase,
-    RequestMarketAnalysisUseCase,
+    RequestLatestNewsAnalysisUseCase,
     GetAnalysisReportUseCase,
     ListAnalysisReportsUseCase,
 ];

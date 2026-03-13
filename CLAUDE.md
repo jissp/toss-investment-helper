@@ -91,7 +91,7 @@ src/
 1. HTTP POST `/v1/ai-analysis/stock` 또는 `/v1/ai-analysis/market`
 2. `AiAnalysisDomainController` → `RequestStockAnalysisUseCase`
 3. `AiAnalysisService.requestStockAnalysis()` → `AdapterFactory`로 적절한 Adapter 선택
-4. `StockAnalyzerAdapter` / `MarketAnalyzerAdapter` → BullMQ Children Jobs 생성
+4. `StockAnalyzerAdapter` / `LatestNewsAnalyzerAdapter` → BullMQ Children Jobs 생성
 5. `PromptToGeminiCliProcessor` → `GeminiCliService.requestPrompt()` 실행 (gemini CLI 프로세스 스폰)
 6. 분석 결과 MongoDB(`AiAnalysisReport`) 저장 + Slack 알림
 

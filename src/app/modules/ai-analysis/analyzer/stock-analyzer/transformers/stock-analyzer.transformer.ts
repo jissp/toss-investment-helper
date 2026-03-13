@@ -1,7 +1,6 @@
-import { Injectable } from '@nestjs/common';
 import { Pipe } from '@common/types';
 import { TradingTrendData } from '@app/common/interfaces';
-import { replaceTemplate } from '@app/modules/ai-analysis';
+import { replaceTemplate } from '../../../common';
 import { STOCK_ANALYZER_PROMPT_TEMPLATE } from '../prompts';
 
 type Args = {
@@ -9,7 +8,6 @@ type Args = {
     resultPrompts: string[];
 };
 
-@Injectable()
 export class StockAnalyzerTransformer implements Pipe<Args, string> {
     transform({ resultPrompts, tradingTrends }: Args): string {
         const currentDate = new Date();
