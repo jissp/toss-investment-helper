@@ -1,0 +1,22 @@
+src/extension
+.prettierrc
+eslint.config.mjs
+nest-cli.json
+
+# AI 관련
+.claude
+docs
+
+# Docker 관련
+docker
+docker-compose.yaml
+.dockerignore
+
+# README 관련
+assets
+README.md
+
+# IDE
+.idea
+.git
+dist
