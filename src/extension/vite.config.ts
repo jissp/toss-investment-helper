@@ -1,10 +1,11 @@
 import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 import { crx } from '@crxjs/vite-plugin';
 import path from 'node:path';
 import manifest from './manifest.json';
 
 export default defineConfig({
-    plugins: [crx({ manifest })],
+    plugins: [react(), crx({ manifest })],
     build: {
         // 빌드 결과물이 저장될 폴더 (NestJS public 폴더로 지정도 가능)
         outDir: 'dist',

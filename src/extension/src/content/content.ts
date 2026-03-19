@@ -1,6 +1,6 @@
 import { DomObserver, RouterObserver } from '@extension/src/content/observers';
 import { ContentEventListener } from './content-event.listener';
-import { BackendApiService, TemplateService } from './services';
+import { BackendApiService } from './services';
 import { ContentFeature } from './interfaces';
 import {
     AiAnalysisButtonFeature,
@@ -9,7 +9,6 @@ import {
 } from './features';
 
 async function init() {
-    const templateService: TemplateService = TemplateService.getInstance();
     const backendApiService: BackendApiService =
         BackendApiService.getInstance();
 
@@ -23,8 +22,6 @@ async function init() {
 
     RouterObserver.getInstance().initialize();
     DomObserver.getInstance().initialize();
-
-    await templateService.init();
 
     const features: ContentFeature[] = [
         new AiAnalysisButtonFeature(),
