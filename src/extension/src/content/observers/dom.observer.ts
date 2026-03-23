@@ -25,7 +25,7 @@ export class DomObserver {
                         reinstall();
                     }
                 });
-            }, 200);
+            }, 100);
         });
 
         this.observer.observe(document.body, {

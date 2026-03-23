@@ -20,9 +20,5 @@ export class ContentEventListener {
         if (!this.isExtensionMessage(message)) {
             return;
         }
-
-        // switch (message.type) {
-        //     case ExtensionMessageType.InitiateUiInjection:
-        // }
     }
 }

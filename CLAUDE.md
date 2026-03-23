@@ -2,6 +2,17 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## 필수 사항
+
+- 설계 문서는 문서 디렉토리 항목을 참고하여 작성하세요.
+- 작업 진행 시 반드시 Git 커밋은 진행하지 마세요.
+
+### 문서 디렉토리
+
+- docs/plans: 설계 문서 저장 경로
+- docs/reviews: 코드 리뷰 등 문서 저장 경로
+- docs/ideas: 아이디어 저장 경로
+
 ## 프로젝트 개요
 
 토스증권 사용자의 투자 결정을 돕는 AI 기반 투자 보조 도구.

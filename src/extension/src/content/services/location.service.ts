@@ -11,12 +11,12 @@ export class LocationService {
         return this.instance;
     }
 
-    public isStockOrderPage(): boolean {
-        return patterns.page.stockOrder.test(location.href);
+    public isStockOrderPage(url: string = location.href): boolean {
+        return patterns.page.stockOrder.test(url);
     }
 
-    public extractStockCode(): string {
-        const match = location.href.match(patterns.page.stockOrder);
+    public extractStockCode(url: string = location.href): string {
+        const match = url.match(patterns.page.stockOrder);
         if (!match || !match[1]) {
             throw new Error('Stock code not found in URL');
         }

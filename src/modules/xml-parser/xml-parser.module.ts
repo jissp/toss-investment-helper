@@ -8,6 +8,7 @@ import { XmlParserService } from './xml-parser.service';
         {
             provide: XmlParserProvider.Parser,
             useValue: new XMLParser({
+                processEntities: false,
                 ignoreAttributes: false,
                 parseTagValue: true,
             }),

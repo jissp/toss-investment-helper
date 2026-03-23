@@ -9,31 +9,12 @@ type Args = {
 };
 
 export class StockAnalyzerTransformer implements Pipe<Args, string> {
-    transform({ resultPrompts, tradingTrends }: Args): string {
+    transform({ resultPrompts }: Args): string {
         const currentDate = new Date();
 
         return replaceTemplate(STOCK_ANALYZER_PROMPT_TEMPLATE, {
             currentDate: currentDate.toISOString(),
             mergedResultPrompts: resultPrompts.join('\n\n'),
-            promptForInvestors: this.transformByTradingTrend(tradingTrends),
         });
-    }
-
-    private transformByTradingTrend(tradingTrends: TradingTrendData[]) {
-        const slicedTradingTrends = tradingTrends.slice(0, 7);
-
-        const prompts = slicedTradingTrends.map(
-            ({
-                baseDate,
-                netIndividualsBuyVolume,
-                netForeignerBuyVolume,
-                netInstitutionBuyVolume,
-                netPensionFundBuyVolume,
-            }) => {
-                return `- **날짜**: ${baseDate} **개인 순매수량**: ${netIndividualsBuyVolume} **외국인 순매수량**: ${netForeignerBuyVolume} **기관 순매수량**: ${netInstitutionBuyVolume} **연기금 순매수량**: ${netPensionFundBuyVolume}`;
-            },
-        );
-
-        return prompts.join('\n');
     }
 }

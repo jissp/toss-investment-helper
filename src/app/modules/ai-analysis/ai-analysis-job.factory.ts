@@ -46,7 +46,7 @@ export class AiAnalysisJobFactory {
             name: '분석 결과 종합해서 재분석',
             queueName: AiAnalysisQueueType.RequestAnalysisAggregate,
             data: {
-                transformer,
+                transformer: transformer.name,
                 ...extraData,
             } as RequestAiAnalysisAggregateJobData,
             children,

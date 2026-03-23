@@ -6,11 +6,13 @@ import {
     AiAnalysisQueueType,
     RequestAiAnalysisAggregateJobData,
 } from '../interfaces';
+import { AggregateTransformerFactory } from '../aggregate-transformer.factory';
 
 @Processor(AiAnalysisQueueType.RequestAnalysisAggregate)
 export class RequestAnalysisAggregateProcessor extends WorkerHost {
     constructor(
         private readonly geminiCliService: GeminiCliService,
+        private readonly aggregateTransformerFactory: AggregateTransformerFactory,
         private readonly slackService: SlackService,
     ) {
         super();
@@ -19,12 +21,15 @@ export class RequestAnalysisAggregateProcessor extends WorkerHost {
     async process(
         job: Job<RequestAiAnalysisAggregateJobData>,
     ): Promise<string> {
-        const { transformer, ...transformFields } = job.data;
+        const { transformer: transformerName, ...transformFields } = job.data;
+
+        const transformer =
+            this.aggregateTransformerFactory.getTransformer(transformerName);
 
         const results = await this.getChildrenValues(job);
 
         const result = await this.geminiCliService.requestPrompt(
-            new transformer().transform({
+            transformer.transform({
                 resultPrompts: results,
                 ...transformFields,
             }),

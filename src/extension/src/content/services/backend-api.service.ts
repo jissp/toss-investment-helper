@@ -7,6 +7,7 @@ import {
 import { TossWatchList } from '@app/common/interfaces/toss/toss.interface';
 import { RequestStockAnalysisRequestDto } from '@app/modules/domains/ai-analysis-domain/dto/requests/request-stock-analysis.request.dto';
 import { RequestMarketAnalysisRequestDto } from '@app/modules/domains/ai-analysis-domain/dto/requests/request-market-analysis.request.dto';
+import { AiAnalysisType } from '@app/modules/ai-analysis';
 
 export class BackendApiService {
     private static instance: BackendApiService;
@@ -36,7 +37,14 @@ export class BackendApiService {
         });
     }
 
-    requestStockAiAnalysis(body: RequestStockAnalysisRequestDto) {
+    getStockAiAnalysisReport(reportType: AiAnalysisType, reportTarget: string) {
+        return this.send({
+            method: 'GET',
+            path: `/v1/ai-analysis/reports/${reportType}/${reportTarget}`,
+        });
+    }
+
+    requestStockAiAnalysisReport(body: RequestStockAnalysisRequestDto) {
         return this.send({
             method: 'POST',
             path: '/v1/ai-analysis/stock',

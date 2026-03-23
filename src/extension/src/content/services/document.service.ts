@@ -12,7 +12,7 @@ export class DocumentService {
     }
 
     public getMainElement(): Nullable<HTMLElement> {
-        return document.querySelector('div[id="main-content"]')!;
+        return document.querySelector<HTMLElement>('div[id="main-content"]');
     }
 
     /**

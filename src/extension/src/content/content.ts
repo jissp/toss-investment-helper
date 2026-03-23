@@ -1,12 +1,12 @@
 import { DomObserver, RouterObserver } from '@extension/src/content/observers';
 import { ContentEventListener } from './content-event.listener';
 import { BackendApiService } from './services';
-import { ContentFeature } from './interfaces';
 import {
-    AiAnalysisButtonFeature,
-    LatestNewsAiAnalysisButtonFeature,
-    StockScoreSectionFeature,
-} from './features';
+    AddAiAnalysisToolbarUseCase,
+    BaseUseCaseAbstract,
+    OverlayInvestorSectionUseCase,
+    RequestLatestNewsAiAnalysisUseCase,
+} from './use-cases';
 
 async function init() {
     const backendApiService: BackendApiService =
@@ -23,10 +23,10 @@ async function init() {
     RouterObserver.getInstance().initialize();
     DomObserver.getInstance().initialize();
 
-    const features: ContentFeature[] = [
-        new AiAnalysisButtonFeature(),
-        new StockScoreSectionFeature(),
-        new LatestNewsAiAnalysisButtonFeature(),
+    const features: BaseUseCaseAbstract[] = [
+        new AddAiAnalysisToolbarUseCase(),
+        new OverlayInvestorSectionUseCase(),
+        new RequestLatestNewsAiAnalysisUseCase(),
     ];
 
     features.forEach((f) => f.start());

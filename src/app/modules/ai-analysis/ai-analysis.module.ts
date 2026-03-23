@@ -16,6 +16,7 @@ import { LatestNewsAnalyzerAdapter, StockAnalyzerAdapter } from './analyzer';
 import { AiAnalysisJobFactory } from './ai-analysis-job.factory';
 import { AiAnalysisAdapterFactory } from './ai-analysis-adapter.factory';
 import { AiAnalysisService } from './ai-analysis.service';
+import { AggregateTransformerFactory } from './aggregate-transformer.factory';
 
 const flowTypes = [AiAnalysisFlowType.RequestAnalysis];
 const queueTypes = [
@@ -56,8 +57,9 @@ export class AiAnalysisModule {
                 ...adapters,
                 AiAnalysisAdapterFactory,
                 AiAnalysisJobFactory,
+                AggregateTransformerFactory,
             ],
-            exports: [AiAnalysisAdapterFactory],
+            exports: [AiAnalysisAdapterFactory, AggregateTransformerFactory],
         };
     }
 

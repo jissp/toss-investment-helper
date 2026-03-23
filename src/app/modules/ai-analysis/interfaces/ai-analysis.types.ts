@@ -35,5 +35,5 @@ export type AiReportParams<T extends AiAnalysisType> =
 
 export interface RequestAiAnalysisAggregateJobData {
     [key: string]: unknown;
-    transformer: ConstructorType<Pipe<unknown, string>>;
+    transformer: string;
 }

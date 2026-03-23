@@ -38,7 +38,14 @@ export class RequestStockInvestorScoreUseCase implements BaseUseCase<
     private readonly timeWeights = [1.5, 1.3, 1.0, 0.9, 0.7, 0.6, 0.5];
 
     execute(payload: RequestStockScoreRequestDto): StockScoreResponseDto {
-        const trends = payload.tradingTrends.slice(0, 7);
+        // 모든 값이 0인 날짜 제외 (아직 집계 안 된 날)
+        const trends = payload.tradingTrends
+            .filter((trend) => {
+                const fields = Object.keys(this.institutionalWeights);
+
+                return fields.some((field) => trend[field] !== 0);
+            })
+            .slice(0, this.timeWeights.length);
 
         const investorAnalysis = {
             individual: this.analyzeInvestor(trends, 'netIndividualsBuyVolume'),
@@ -137,10 +144,11 @@ export class RequestStockInvestorScoreUseCase implements BaseUseCase<
         }
 
         // ── 기관 ──────────────────────────────────────────────────────────────
-        if (institution.trend === 'net_sell') {
-            const level: SignalLevel =
-                institution.consecutiveDays >= 3 ? 'danger' : 'warning';
-            push(level, `기관 ${institution.consecutiveDays}일 연속 이탈`);
+        if (
+            institution.trend === 'net_sell' &&
+            institution.consecutiveDays >= 3
+        ) {
+            push('danger', `기관 ${institution.consecutiveDays}일 연속 이탈`);
         }
         if (institution.trendChange === 'sell_to_buy') {
             push('positive', '기관 매도 → 매수 전환 (수급 개선 신호)');
@@ -150,10 +158,11 @@ export class RequestStockInvestorScoreUseCase implements BaseUseCase<
         }
 
         // ── 연기금 ────────────────────────────────────────────────────────────
-        if (pensionFund.trend === 'net_sell') {
-            const level: SignalLevel =
-                pensionFund.consecutiveDays >= 3 ? 'danger' : 'warning';
-            push(level, `연기금 ${pensionFund.consecutiveDays}일 연속 이탈`);
+        if (
+            pensionFund.trend === 'net_sell' &&
+            pensionFund.consecutiveDays >= 3
+        ) {
+            push('danger', `연기금 ${pensionFund.consecutiveDays}일 연속 이탈`);
         }
 
         // ── 복합 패턴 ─────────────────────────────────────────────────────────
