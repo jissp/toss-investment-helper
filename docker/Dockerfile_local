@@ -1,4 +1,4 @@
-FROM node:24.14.0 AS builder
+FROM node:24.14.0 as builder
 
 WORKDIR /build
 
@@ -11,7 +11,9 @@ COPY . .
 
 RUN npm run build
 
-FROM node:24.14.0 AS runnder
+FROM node:24.14.0 as runnder
+
+RUN npm install -g @google/gemini-cli@latest
 
 WORKDIR /app
 
@@ -19,7 +21,9 @@ COPY --from=builder /build/dist ./dist
 COPY --from=builder /build/node_modules ./node_modules
 COPY --from=builder /build/package.json ./package.json
 COPY --from=builder /build/tsconfig.json ./tsconfig.json
+COPY --from=builder /build/.env.docker ./.env
+
 
 EXPOSE 3000
 
-ENTRYPOINT ["sh", "-c", "npm run start:prod"]
+ENTRYPOINT ["sh", "-c", "npm run start:dev"]

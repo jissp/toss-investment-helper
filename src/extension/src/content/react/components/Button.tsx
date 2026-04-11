@@ -11,7 +11,7 @@ export const Button = ({ title, children, onClick }: ButtonProps) => {
         <button
             onClick={onClick}
             title={title}
-            className={'tw4l-emtxt715 tw4l-emtxt7o tw4l-emtxt7y tw4l-emtxt712'}
+            className={'tw3v-emtxt715 tw3v-emtxt7o tw3v-emtxt7y tw3v-emtxt712'}
         >
             {children}
         </button>

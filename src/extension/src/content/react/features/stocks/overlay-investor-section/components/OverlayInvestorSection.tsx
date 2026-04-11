@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { TradingTrendResponse } from '@app/common/interfaces';
 import type {
     Signal,
@@ -36,7 +36,15 @@ interface TossTradingTrendDetailsProps {
     tossTradingTrendData: Nullable<TradingTrendResponse>;
 }
 
-const tossTradingTrendfields = [
+const tossTradingTrendFields = [
+    {
+        name: '종가',
+        key: 'close',
+    },
+    {
+        name: '등락률',
+        key: 'priceChangeRatio',
+    },
     {
         name: '개인',
         key: 'netIndividualsBuyVolume',
@@ -126,25 +134,36 @@ export const TossTradingTrendDetails: React.FC<
         return <Skeleton />;
     }
 
-    const tossTradingTrendFieldNames = tossTradingTrendfields.map(
+    const tossTradingTrendFieldNames = tossTradingTrendFields.map(
         (field) => field.name,
     );
 
     const transformedTossTGradingTrendData = tossTradingTrendData.body.map(
         (row) => {
-            const tradingTrendValues = tossTradingTrendfields.map(
-                (field) => row[field.key] as number,
-            );
+            const tradingTrendValues = tossTradingTrendFields.map((field) => {
+                let value: number | string = row[field.key];
+
+                if (field.key === 'priceChangeRatio') {
+                    value = ((row.close / row.base - 1) * 100).toFixed(2);
+                }
+
+                return {
+                    ...field,
+                    value,
+                };
+            });
 
             return [
                 toShortDate(row.baseDate),
-                ...tradingTrendValues.map((value) => (
+                ...tradingTrendValues.map(({ key, value }) => (
                     <span
                         style={{
                             color: getNumberColorStyle(value),
                         }}
                     >
-                        {value.toLocaleString()}
+                        {key === 'priceChangeRatio'
+                            ? `${value.toLocaleString()}%`
+                            : value.toLocaleString()}
                     </span>
                 )),
             ];
@@ -169,14 +188,22 @@ export const TossTradingTrendDetails: React.FC<
 export const OverlayInvestorSection: React.FC<StockScoreSectionProps> = ({
     stockCode: initialStockCode,
 }) => {
-    const [stockCode, setStockCode] = useState<string>(initialStockCode);
     const locationService = LocationService.getInstance();
+    const [stockCode, setStockCode] = useState<string>(initialStockCode);
 
-    // URL 변경 감지 및 상태 업데이트
-    useUrlChange((url) => {
-        const newStockCode = locationService.extractStockCode(url);
-        setStockCode(newStockCode);
-    });
+    useEffect(() => {
+        setStockCode(initialStockCode);
+    }, [initialStockCode]);
+
+    useUrlChange(
+        useCallback(
+            (url: string) => {
+                const newStockCode = locationService.extractStockCode(url);
+                setStockCode(newStockCode);
+            },
+            [locationService],
+        ),
+    );
 
     const { isLoading: isLoadingStockInfo, stockInfo } = useLoadStockInfo({
         stockCode,

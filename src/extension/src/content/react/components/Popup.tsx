@@ -45,6 +45,12 @@ export const PopupView: React.FC<Props> = ({
                     overflow: 'auto',
                     width,
                     height,
+                    // WTS 다크 테마와 일치하는 색상
+                    backgroundColor: 'rgb(23, 23, 28)',
+                    // 미세한 테두리로 경계 강조
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    // 깊이감 있는 그림자
+                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)',
                 }}
             >
                 {children}

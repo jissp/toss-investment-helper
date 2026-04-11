@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useServices } from '../../../../context';
 import {
     Button,
@@ -30,6 +30,7 @@ const AiAnalysisByStockToolbar: React.FC<
     }
 
     const { backend } = useServices();
+    const [isRequesting, setIsRequesting] = useState(false);
     const { isLoading: isLoadingStockInfo, stockInfo } = useLoadStockInfo({
         stockCode,
     });
@@ -38,7 +39,7 @@ const AiAnalysisByStockToolbar: React.FC<
             stockCode,
         });
 
-    if (isLoadingStockInfo || isLoadingTossTradingTrendData) {
+    if (isLoadingStockInfo || isLoadingTossTradingTrendData || isRequesting) {
         return (
             <Button title={'AI 분석 요청 중'} onClick={() => {}}>
                 ⏳
@@ -46,34 +47,35 @@ const AiAnalysisByStockToolbar: React.FC<
         );
     }
 
-    const handleRequestAiAnalysisByStockClick = () => {
-        if (isLoadingStockInfo || isLoadingTossTradingTrendData) {
+    const handleRequestAiAnalysisByStockClick = async () => {
+        if (
+            isLoadingStockInfo ||
+            isLoadingTossTradingTrendData ||
+            isRequesting
+        ) {
             return;
         }
 
-        async function requestAiAnalysis() {
-            try {
-                if (isNil(stockInfo) || isNil(tossTradingTrendData)) {
-                    return;
-                }
-                const { code, name } = stockInfo;
-
-                await backend.requestStockAiAnalysisReport({
-                    stockSymbol: code,
-                    stockName: name,
-                    tradingTrends: tossTradingTrendData.body,
-                });
-
-                alert(
-                    'AI 분석 요청이 완료되었습니다. 결과는 알림으로 전달됩니다.',
-                );
-            } catch (error) {
-                console.error('Failed to request AI analysis:', error);
-                alert('AI 분석 요청에 실패했습니다.');
+        setIsRequesting(true);
+        try {
+            if (isNil(stockInfo) || isNil(tossTradingTrendData)) {
+                return;
             }
-        }
+            const { code, name } = stockInfo;
 
-        requestAiAnalysis();
+            await backend.requestStockAiAnalysisReport({
+                stockSymbol: code,
+                stockName: name,
+                tradingTrends: tossTradingTrendData.body,
+            });
+
+            alert('AI 분석 요청이 완료되었습니다. 결과는 알림으로 전달됩니다.');
+        } catch (error) {
+            console.error('Failed to request AI analysis:', error);
+            alert('AI 분석 요청에 실패했습니다.');
+        } finally {
+            setIsRequesting(false);
+        }
     };
 
     return (
@@ -146,11 +148,16 @@ export const RequestAiAnalysisByStockButtonGroup: React.FC = () => {
         location.extractStockCode(),
     );
 
-    // URL 변경 감지 및 상태 업데이트
-    useUrlChange((url) => {
-        const newStockCode = location.extractStockCode(url);
-        setStockCode(newStockCode);
-    });
+    // URL 변경 감지 콜백을 useCallback으로 메모이제이션
+    const handleUrlChange = useCallback(
+        (url: string) => {
+            const newStockCode = location.extractStockCode(url);
+            setStockCode(newStockCode);
+        },
+        [location],
+    );
+
+    useUrlChange(handleUrlChange);
 
     return (
         <div className={'njzdl36'}>

@@ -3,6 +3,9 @@ import React, { ReactNode } from 'react';
 
 type Row = string | number | ReactNode;
 
+// WTS 테이블 행 높이 (px)
+const ROW_HEIGHT = 44;
+
 type TossTableRowOptions = {
     fieldOptions: TossTableFieldOptions[];
 };
@@ -30,9 +33,9 @@ type TossTableRowProps = {
 
 const RowStyleMap = {
     textAlign: {
-        [TextAlign.Left]: 'tw4l-kvawo25',
-        [TextAlign.Center]: 'tw4l-kvawo26',
-        [TextAlign.Right]: 'tw4l-kvawo27',
+        [TextAlign.Left]: 'tw3v-kvawo25',
+        [TextAlign.Center]: 'tw3v-kvawo26',
+        [TextAlign.Right]: 'tw3v-kvawo27',
     },
 };
 
@@ -47,7 +50,7 @@ function getGridTemplateColumnsStyle(repeat: number) {
 export const TossTableHead = ({ fields }: { fields: string[] }) => {
     return (
         <thead
-            className="tw4l-4pu5o90"
+            className="tw3v-4pu5o90"
             style={{ zIndex: 2, position: 'sticky', top: '0px' }}
         >
             <tr
@@ -59,9 +62,9 @@ export const TossTableHead = ({ fields }: { fields: string[] }) => {
                 }}
             >
                 {fields.map((field, index) => (
-                    <th className="tw4l-1apn5az0" key={index}>
-                        <div className="tw4l-1apn5az2 tw4l-1apn5az1 tw4l-1apn5az4 tw4l-kvawo26">
-                            <div className="tw4l-1apn5azd">{field}</div>
+                    <th className="tw3v-1apn5az0" key={index}>
+                        <div className="tw3v-1apn5az2 tw3v-1apn5az1 tw3v-1apn5az4 tw3v-kvawo26">
+                            <div className="tw3v-1apn5azd">{field}</div>
                         </div>
                     </th>
                 ))}
@@ -75,7 +78,7 @@ export const TossTableBody = ({ rows, rowOptions }: TossTableBodyProps) => {
         <tbody
             style={{
                 display: 'block',
-                height: `${rows.length * 44}px`,
+                height: `${rows.length * ROW_HEIGHT}px`,
                 position: 'relative',
             }}
         >
@@ -97,11 +100,11 @@ export const TossRow = ({ index, row, rowOptions }: TossTableRowProps) => {
             rowOptions?.fieldOptions[index] ?? defaultRowFieldOptions;
 
         return (
-            <td className="tw4l-mq48z20">
+            <td className="tw3v-mq48z20">
                 <div
-                    className={`tw4l-mq48z22 ${RowStyleMap.textAlign[fieldOptions.textAlign!]} tw4l-mq48z25`}
+                    className={`tw3v-mq48z22 ${RowStyleMap.textAlign[fieldOptions.textAlign!]} tw3v-mq48z25`}
                 >
-                    <div className="tw4l-mq48z2h">{item}</div>
+                    <div className="tw3v-mq48z2h">{item}</div>
                 </div>
             </td>
         );
@@ -124,7 +127,7 @@ export const TossRow = ({ index, row, rowOptions }: TossTableRowProps) => {
 export const TossTable = ({ fields, rows, rowOptions }: TossTableProps) => {
     return (
         <table
-            className="tw4l-kvawo28 tw4l-kvawo2a tw4l-kvawo2c tw4l-kvawo2b tw4l-kvawo2e _1p5yqoh0"
+            className="tw3v-kvawo28 tw3v-kvawo2a tw3v-kvawo2c tw3v-kvawo2b tw3v-kvawo2e _1p5yqoh0"
             style={{ borderSpacing: '0px', overflowAnchor: 'none' }}
         >
             <TossTableHead fields={fields} />

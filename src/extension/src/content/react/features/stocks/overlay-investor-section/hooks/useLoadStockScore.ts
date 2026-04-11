@@ -13,8 +13,6 @@ type Props = {
 export type UseLoadStockScoreResponse = {
     isLoading: boolean;
     isMounted: boolean;
-    stockInfo: Nullable<StockInfo>;
-    tossTradingTrendData: Nullable<TradingTrendResponse>;
     stockScore: Nullable<StockScoreResponseDto>;
 };
 
@@ -67,8 +65,6 @@ export const useLoadStockScore = ({
     return {
         isLoading,
         isMounted,
-        stockInfo,
-        tossTradingTrendData,
         stockScore,
     };
 };

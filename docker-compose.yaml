@@ -3,7 +3,7 @@ services:
     container_name: toss-investment-helper-be
     build:
       context: .
-      dockerfile: docker/Dockerfile
+      dockerfile: docker/Dockerfile_local
       args:
         - NODE_ENV=prod
         - APP_NAME=toss-investment-helper-be

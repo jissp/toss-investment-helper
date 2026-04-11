@@ -6,6 +6,7 @@ nest-cli.json
 # AI 관련
 .claude
 docs
+CLAUDE.md
 
 # Docker 관련
 docker
